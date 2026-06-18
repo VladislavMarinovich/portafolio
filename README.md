@@ -1,10 +1,10 @@
 <div align="center">
 
-# 🐾 Portafolio · Vladislav Marinovich
+# 🐾 Patitas Stack · Portafolio de Vladislav Marinovich
 
-**Sistemas de información *policy-grade* para organizaciones mission-driven de LATAM**
+**Sistemas de información *policy-grade* para el sector social de LATAM**
 
-_Arquitectura · ingeniería de datos · IA aplicada — de la ingesta a la decisión_
+_De la ingesta del dato a la decisión — arquitectura, ingeniería de datos e IA aplicada al impacto_
 
 [![Perfil](https://img.shields.io/badge/GitHub-VladislavMarinovich-181717?logo=github)](https://github.com/VladislavMarinovich)
 [![Web](https://img.shields.io/badge/Marinovich_Consulting-marinovich.co-E8702A)](https://marinovich.co)
@@ -14,21 +14,22 @@ _Arquitectura · ingeniería de datos · IA aplicada — de la ingesta a la deci
 
 ---
 
-## Qué es esto
-
-> **No hago dashboards: construyo los sistemas que generan los datos correctos.**
-
-Este repositorio es la **vitrina pública** de mi trabajo: **diagramas de arquitectura, decisiones de diseño y casos de estudio**. El **código vive en repositorios privados** — si quieres revisarlo, hay un botón de [🔑 solicitar acceso](#-solicitar-acceso-al-código) más abajo (te agrego como lector).
-
-Mi enfoque: infraestructura que permite a organizaciones del **sector social y regulado** operar con datos confiables —y a futuro con agentes de IA— **sin alucinar y sin violar compliance** (Ley 1581 / Habeas Data).
+> **Cómo leer este portafolio — 3 niveles de profundidad:**
+> 🟢 **Nivel 1 · Visión** (aquí) · qué hacemos, productos, potencial e investigación.
+> 🔵 **Nivel 2 · Arquitectura** · cada [ficha de proyecto](#-los-proyectos) y el [atlas](docs/atlas/): diagramas, diccionario de datos, dominio y máquinas de estado (todo público).
+> 🔒 **Nivel 3 · El código** · los repos privados, por **solicitud de acceso** desde cada ficha.
 
 ---
 
-## 🏗️ Proyecto insignia · Patitas Stack
+## 🎯 Qué hacemos
 
-El sistema de información end-to-end de la **Fundación Salvando Patitas** (donde soy CTO y cofundador): desde que un ciudadano reporta un animal en condición crítica hasta que el caso se cierra — con **trazabilidad financiera pública por caso**.
+El sector de protección animal de LATAM opera **a ciegas**: sin trazabilidad del dinero, sin datos de operación, sin forma de demostrar impacto. Construimos el **sistema de información que cambia eso** — uno donde cada peso donado es **trazable públicamente** desde la donación hasta la factura del veterinario, y donde la operación se mide para decidir mejor.
 
-Su columna vertebral es un **split OLTP/OLAP**: Salesforce como cerebro operativo en tiempo real, y un warehouse serverless en Azure para analítica e investigación. La web pública es una **vitrina pasiva** que muestra cifras reales calculadas en el warehouse.
+**Métrica norte: vidas salvadas por peso invertido.** Marco: *design science* + sistemas de información (datos reales de campo, no de laboratorio).
+
+## 🐾 El Patitas Stack
+
+Un sistema end-to-end: desde que un ciudadano reporta un animal en condición crítica hasta que el caso se cierra — con trazabilidad financiera por caso. Su columna vertebral es un **split OLTP/OLAP**: Salesforce decide en tiempo real, un warehouse serverless en Azure computa la historia, y la web es una vitrina pasiva de cifras reales.
 
 ```mermaid
 flowchart LR
@@ -56,53 +57,46 @@ flowchart LR
     JOB -. orquesta .-> PUBLISH
 ```
 
-📐 **[Atlas completo de arquitectura →](docs/atlas/)** — 6 diagramas (vista panorámica, modelo de dominio, data platform, infraestructura cloud, web pública y el loop de transparencia).
+📐 **[Atlas completo de arquitectura →](docs/atlas/)** · 6 diagramas (panorámica, dominio, data platform, infraestructura, web y el loop de transparencia).
 
-### Por qué este diseño
+## 🚀 Potencial
 
-| Decisión | Razón |
-|---|---|
-| **Split OLTP/OLAP** | Salesforce decide en tiempo real; el warehouse computa la historia una sola vez (sin recalcular en el operativo). |
-| **Trazabilidad por caso** (caso padre + casos hijos) | Cada donación, gasto y pago queda vinculado al animal que lo originó → transparencia radical verificable. |
-| **Serverless en el DW** | Se paga por *correr* la información, no por *tenerla* — sostenible para una ONG. |
-| **Salesforce aislado de integraciones salientes** | El único *callout* de Salesforce es a Azure Blob (directo, vía Apex); SF **no** invoca servicios externos. Las integraciones viven fuera del org. |
+- **Infraestructura reutilizable** para el sector animalista de LATAM — un terreno **sin benchmark regional**. Lo construido para una fundación es replicable para muchas.
+- **Modelo de impacto medible**: la trazabilidad pública no es solo ética, es un **mecanismo de captación** (demostrar impacto atrae recursos).
+- **Camino a producto**: del sistema a medida hoy → a un paquete/SaaS para ONGs del tercer sector.
 
----
+## 🔬 Líneas de investigación
 
-## 📦 Repositorios
+- **Trazabilidad pública *policy-grade***: cómo diseñar la transparencia de un sistema social para que sostenga la confianza y la captación de recursos (bajo Ley 1581 / Habeas Data).
+- **Dataset georreferenciado original** de reportes ciudadanos del Caribe colombiano — datos que no existían.
+- **Triage por visión artificial**: de la foto del reporte a una **sospecha de gravedad/condición** (decision-support, nunca diagnóstico). El par `evidencia (foto) ↔ diagnóstico del vet` es dato de entrenamiento etiquetado que el propio sistema genera.
 
-> Cada repo tiene su **ficha pública**. El código privado (🔒) se solicita **por repo** desde su ficha; **infra** queda restringido por seguridad (solo diagrama); la App (🌐) es pública.
+## 💎 Activos que pueden emerger
 
-| Repo | Qué es | Stack | Ficha |
-|---|---|---|---|
-| **Consola Operativa SOS** | Gestión end-to-end del caso (Salesforce) | Apex · LWC · Flows | [📄 ver ficha](docs/repos/consola.md) · 🔒 acceso por solicitud |
-| **Data Warehouse** | Warehouse analítico · medallón bronze/silver/gold | Synapse serverless · SQL directo | [📄 ver ficha](docs/repos/data-warehouse.md) · 🔒 acceso por solicitud |
-| **Infraestructura** | IaC · DW + pipeline + observabilidad | Terraform · Azure | [📄 ver ficha](docs/repos/fsp-infra.md) · 🔒 restringido (solo diagrama) |
-| **App de Reporte Ciudadano** | Puerta de entrada del dato | React · TypeScript · Supabase | [📄 ver ficha](docs/repos/app.md) · 🌐 público |
+- El **dataset sectorial original** (georreferenciado + clínico) — el *moat*.
+- **Pares imagen→etiqueta** para entrenar modelos de triage.
+- El **paquete productizado** del Patitas Stack para otras ONGs.
+- La **metodología** (cómo se construye un sistema de información del tercer sector de cero).
 
----
+## 🧩 Los proyectos
 
-## 🔬 Dirección de investigación
+> 4 proyectos, **un solo loop** → [🧭 cómo se conecta todo](docs/como-se-conecta.md). Cada ficha está en 3 niveles (visión · arquitectura · código).
 
-El sistema genera **datasets originales** del sector de protección animal en LATAM — un terreno donde no existe benchmark regional. Mi línea: **diseñar la trazabilidad pública de un sistema de información del sector social** para que la asimetría entre demanda ciudadana y capacidad organizacional opere como mecanismo de captación de recursos **sin instrumentalizar el sufrimiento del beneficiario**.
+| Proyecto | Qué resuelve | Ficha |
+|---|---|---|
+| **1 · Consola SOS** | El cerebro operativo del rescate (Salesforce) | [📄 ficha](docs/proyectos/consola-sos.md) |
+| **2 · DW · Vitrina Pública** | Cifras reales por caso → transparencia | [📄 ficha](docs/proyectos/dw-vitrina-publica.md) |
+| **3 · App SOS + Consola de Priorización** | La puerta de entrada del dato + el despacho | [📄 ficha](docs/proyectos/app-sos-priorizacion.md) |
+| **4 · DW · Dataset de Reportes Ciudadanos** | El activo de investigación (datos + ML) · 🚧 | [📄 ficha](docs/proyectos/dw-dataset-reportes-ciudadanos.md) |
 
-Métrica norte: **vidas salvadas por peso invertido.** Marco: *design science* + sistemas de información (no psicología de laboratorio — datos reales de campo capturados por el propio sistema).
+## 🔑 Acceso al código
 
----
-
-## 🔑 Solicitar acceso al código
-
-¿Eres profesor, investigador o evaluas mi perfil y quieres ver el código vivo? Hay dos caminos:
-
-[![Solicitar acceso](https://img.shields.io/badge/🔑_Solicitar_acceso-abrir_solicitud-2ea44f?style=for-the-badge)](https://github.com/VladislavMarinovich/portafolio/issues/new?template=solicitar-acceso.yml)
-
-- **Botón de arriba** → abre una solicitud (issue) pre-llenada; te reviso y te agrego como **lector** de los repos que te interesen.
-- **Correo directo** → [vladislav@marinovich.co](mailto:vladislav@marinovich.co?subject=Solicitud%20de%20acceso%20a%20repos%20-%20Portafolio)
-
-También ofrezco, bajo invitación, **acceso de lectura a Atlassian** (Confluence + Jira) para mostrar la gestión real del proyecto: backlog, runbooks, ADRs y evolución de decisiones.
+El código vive en repos privados; se solicita **por componente** desde su ficha (botón "Solicitar acceso"). Te reviso y te agrego como **lector**. También ofrezco, bajo invitación, **acceso de lectura a Atlassian** (Confluence + Jira) para mostrar la gestión real: backlog, runbooks, ADRs y evolución de decisiones. · 📧 [vladislav@marinovich.co](mailto:vladislav@marinovich.co)
 
 ---
 
 <div align="center">
-<sub>Construido con 🧡 en Bogotá · <a href="https://marinovich.co">Marinovich Consulting</a> · El código del bien también merece buena arquitectura</sub>
+<sub>Construido con 🧡 por los <strong>42 casos</strong> que hemos atendido hasta hoy — y por las <strong>decenas de miles de vidas</strong> que vamos a salvar.</sub>
+<br/>
+<sub><a href="https://marinovich.co">Marinovich Consulting</a> · Bogotá</sub>
 </div>
