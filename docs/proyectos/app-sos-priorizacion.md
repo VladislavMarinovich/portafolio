@@ -4,7 +4,7 @@
 
 **Proyecto 3 del Patitas Stack** · la puerta de entrada del dato + el despacho operativo
 
-`licencias-marinovich/sos-salvando-patitas` · 🌐 App pública · 🎨 Consola de priorización en diseño (v0.2)
+Repo canónico → org **`salvandopatitas`** *(en creación)* · MVP V0.1 hoy en `licencias-marinovich/sos-salvando-patitas` · 🎨 Consola de Priorización en diseño (v0.2)
 
 </div>
 
@@ -67,7 +67,7 @@ Cada transición queda en `status_history` (quién, qué, cuándo) → trazabili
 
 ## 🔑 Acceso
 
-- **App** (`sos-salvando-patitas`) → 🌐 [repo público](https://github.com/licencias-marinovich/sos-salvando-patitas).
+- **App** → el repo canónico vivirá en el org **`salvandopatitas`** (en creación). El **MVP V0.1** está hoy en [`licencias-marinovich/sos-salvando-patitas`](https://github.com/licencias-marinovich/sos-salvando-patitas).
 - **Consola de Priorización** → 🎨 en diseño (v0.2). El mockup de arriba es la directiva de diseño en curso.
 
 ---
