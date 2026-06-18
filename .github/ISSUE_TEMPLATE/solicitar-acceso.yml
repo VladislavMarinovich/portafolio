@@ -1,0 +1,46 @@
+name: 🔑 Solicitar acceso a los repos
+description: Pide acceso de lectura al código privado (Consola, Data Warehouse, Infraestructura).
+title: "[Acceso] Solicitud de "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por tu interés. Completa esto y te reviso para darte acceso de **lectura** a los repos que te interesen.
+  - type: input
+    id: nombre
+    attributes:
+      label: Nombre completo
+      placeholder: Ej. Olga Mariño
+    validations:
+      required: true
+  - type: input
+    id: institucion
+    attributes:
+      label: Institución / empresa
+      placeholder: Ej. Universidad de los Andes
+    validations:
+      required: false
+  - type: input
+    id: github
+    attributes:
+      label: Tu usuario de GitHub
+      description: Lo necesito para agregarte como lector.
+      placeholder: "@tu-usuario"
+    validations:
+      required: true
+  - type: checkboxes
+    id: repos
+    attributes:
+      label: ¿Qué repos quieres revisar?
+      options:
+        - label: Consola Operativa SOS (Salesforce · Apex · LWC)
+        - label: Data Warehouse (Azure · Synapse · dbt)
+        - label: Infraestructura (Terraform · Azure)
+        - label: Todos
+  - type: textarea
+    id: motivo
+    attributes:
+      label: Motivo
+      description: ¿Para qué quieres revisar el código? (evaluación académica, investigación, colaboración, etc.)
+    validations:
+      required: true
