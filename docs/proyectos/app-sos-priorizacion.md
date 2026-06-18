@@ -10,7 +10,7 @@ Repo canónico → org **`salvandopatitas`** *(en creación)* · MVP V0.1 hoy en
 
 ---
 
-## 🟢 Qué resuelve *(para cualquier lector)*
+## 🟢 Nivel 1 · Visión — qué resuelve
 
 Hoy un animal en condición crítica en la calle **no tiene a dónde reportarse de forma trazable**. Este proyecto cierra ese hueco con dos piezas:
 
@@ -19,7 +19,9 @@ Hoy un animal en condición crítica en la calle **no tiene a dónde reportarse 
 
 Es el inicio del flujo: aquí **nace el dato** que después recorre todo el sistema.
 
-## 🔵 Cómo funciona *(arquitectura)*
+## 🔵 Nivel 2 · Arquitectura — cómo funciona
+
+*(Todo lo de este nivel es público: diagramas, diccionario de datos, dominio y máquinas de estado. El código vivo es el Nivel 3.)*
 
 ```
 👤 Ciudadano → App (reporte) → Supabase + Azure Blob → 🗺️ Consola de Priorización
@@ -30,8 +32,6 @@ Es el inicio del flujo: aquí **nace el dato** que después recorre todo el sist
 
 - **App:** React 19 · Vite · TypeScript · Tailwind 4 · Supabase (Postgres/Auth) · Azure Blob · Leaflet.
 - **Consola de Priorización:** vista combinada **mapa + lista**, orden por `gravedad ↓ · recencia`, filtros (gravedad, estado, tipo, fecha), cobertura multi-ciudad (Cartagena + Barranquilla). El botón **"Convertir en caso de rescate"** crea el Case en Salesforce — el puente entre el reporte ciudadano y la operación.
-
-## ⚙️ Detalle técnico *(para ingeniería)*
 
 ### Máquina de estados del reporte
 
@@ -65,7 +65,9 @@ Cada transición queda en `status_history` (quién, qué, cuándo) → trazabili
 
 > 💡 **Para investigación:** `evidences.file_url` (foto) + `reports.severity` (etiqueta) + `lat/long` = **par imagen→etiqueta georreferenciado** → la semilla del [dataset público de reportes ciudadanos](dw-dataset-reportes-ciudadanos.md) y del triage por visión.
 
-## 🔑 Acceso
+## 🔒 Nivel 3 · El código
+
+El nivel más profundo: el código vivo, por solicitud de acceso.
 
 - **App** → el repo canónico vivirá en el org **`salvandopatitas`** (en creación). El **MVP V0.1** está hoy en [`licencias-marinovich/sos-salvando-patitas`](https://github.com/licencias-marinovich/sos-salvando-patitas).
 - **Consola de Priorización** → 🎨 en diseño (v0.2). El mockup de arriba es la directiva de diseño en curso.
