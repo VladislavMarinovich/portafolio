@@ -65,7 +65,7 @@ flowchart LR
 | **Split OLTP/OLAP** | Salesforce decide en tiempo real; el warehouse computa la historia una sola vez (sin recalcular en el operativo). |
 | **Trazabilidad por caso** (caso padre + casos hijos) | Cada donación, gasto y pago queda vinculado al animal que lo originó → transparencia radical verificable. |
 | **Serverless en el DW** | Se paga por *correr* la información, no por *tenerla* — sostenible para una ONG. |
-| **n8n como bus único** | Salesforce nunca llama servicios externos directo: un solo punto de observabilidad. |
+| **Salesforce aislado de integraciones salientes** | El único *callout* de Salesforce es a Azure Blob (directo, vía Apex); SF **no** llama a n8n/WP/Brevo. Las integraciones externas viven fuera del org. |
 
 ---
 
