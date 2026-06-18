@@ -71,14 +71,14 @@ flowchart LR
 
 ## 📦 Repositorios
 
-> 🔒 = privado · **acceso por solicitud** (ver botón abajo) · 🌐 = público
+> Cada repo tiene su **ficha pública**. El código privado (🔒) se solicita **por repo** desde su ficha; la App (🌐) es pública.
 
-| Repo | Qué es | Stack | |
+| Repo | Qué es | Stack | Ficha |
 |---|---|---|---|
-| `sf-salvando-patitas-v2` | **Consola Operativa SOS** · gestión end-to-end del caso | Apex · LWC · Flows | 🔒 |
-| `fsp-data-warehouse` | **Warehouse analítico** · medallón bronze/silver/gold | Synapse serverless · SQL directo | 🔒 |
-| `fsp-infra` | **Infraestructura como código** · DW + pipeline + observabilidad | Terraform · Azure | 🔒 |
-| [`sos-salvando-patitas`](https://github.com/licencias-marinovich/sos-salvando-patitas) | **App de reporte ciudadano** · puerta de entrada del dato | React · TypeScript · Supabase | 🌐 |
+| **Consola Operativa SOS** | Gestión end-to-end del caso (Salesforce) | Apex · LWC · Flows | [📄 ver ficha](docs/repos/consola.md) · 🔒 |
+| **Data Warehouse** | Warehouse analítico · medallón bronze/silver/gold | Synapse serverless · SQL directo | [📄 ver ficha](docs/repos/data-warehouse.md) · 🔒 |
+| **Infraestructura** | IaC · DW + pipeline + observabilidad | Terraform · Azure | [📄 ver ficha](docs/repos/fsp-infra.md) · 🔒 |
+| **App de Reporte Ciudadano** | Puerta de entrada del dato | React · TypeScript · Supabase | [📄 ver ficha](docs/repos/app.md) · 🌐 |
 
 ---
 
