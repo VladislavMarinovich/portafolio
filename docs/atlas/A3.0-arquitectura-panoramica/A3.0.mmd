@@ -3,10 +3,10 @@
 %% Familia A (Arquitectura técnica) · Atlas de Sistema · Salvando Patitas
 %% Equivalente C4 "Container Diagram" en notación flowchart.
 %% -----------------------------------------------------------------
-%% PIVOTE 100% AZURE (jun 2026): el Data Warehouse analítico corre en
-%% Azure (Delta Lake + Synapse serverless). BigQuery YA NO es el DW;
-%% solo sobrevive como destino del export GA4 para medición/Orion.
-%% Fuente de verdad: Confluence SOSV2 pág 26411010 + 28704770.
+%% 100% AZURE (jun 2026): el Data Warehouse analítico corre en Azure
+%% (Delta Lake + Synapse serverless). Transformación por SQL directo
+%% serverless-safe (dbt descartado). Publicación directa a WordPress
+%% (el ACJ hace el POST). Fuente de verdad: Confluence SOSV2 pág 31064066 (SSoT).
 %% =====================================================================
 flowchart LR
 
@@ -28,20 +28,14 @@ flowchart LR
 
     %% --- WEB PÚBLICA: vitrina pasiva -------------------------------
     subgraph WEB["🌐 WEB PÚBLICA · salvandopatitas.org"]
-        WP["WordPress + Elementor<br/>GiveWP + gateway Mercado Pago<br/>42 casos dinámicos (cifras del DW)"]
-        LEADS["Forms → n8n → Brevo (leads)"]
+        WP["WordPress + Elementor<br/>GiveWP + gateway Mercado Pago<br/>casos dinámicos (cifras del DW)"]
+        LEADS["Forms → Brevo (leads)"]
         MEDICION["GTM → GA4 + Meta Pixel"]
-    end
-
-    %% --- GCP: SOLO medición (no es el DW) --------------------------
-    subgraph GCP["☁️ GCP · solo medición (alimenta Orion)"]
-        BQ["BigQuery<br/>export GA4<br/>dataset «psicología del dar»"]
     end
 
     %% --- Flujos entre containers -----------------------------------
     SF -- "JWT Bearer" --> EXTRACT
     PUBLISH -- "POST /fsp/v1/caso/sync" --> WP
-    MEDICION --> BQ
 
     %% --- Orquestación serverless -----------------------------------
     JOB["Azure Container App Job · caj-fsp-dw (cron 8h)<br/>ACR acrsalvandopatitas · Key Vault kv-salvandopatitas<br/>Service Principal sp-fsp-dw · Log Analytics"]

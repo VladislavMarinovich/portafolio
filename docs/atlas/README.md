@@ -9,7 +9,7 @@ Cada diagrama existe en **dos formatos**:
 
 > **Convención de nombres:** cada carpeta usa el código del Atlas (`A3.0`, `D1`, `D2`, `E1`) para que Confluence ↔ Miro ↔ GitHub ↔ Notion hablen el mismo idioma.
 
-> **Nota de arquitectura (jun 2026):** el Data Warehouse analítico corre **100% en Azure** (Delta Lake + Synapse serverless). BigQuery **ya no es el DW**; sobrevive únicamente como destino del export de GA4 para medición/Orion.
+> **Nota de arquitectura (jun 2026):** el Data Warehouse analítico corre **100% en Azure** (Delta Lake + Synapse serverless). Transformación por **SQL directo serverless-safe** (dbt descartado) y **publicación directa a WordPress** (el Container App Job hace el POST). Fuente de verdad verificada contra prod: Confluence SOSV2 pág 31064066 (SSoT).
 
 ---
 
@@ -32,16 +32,12 @@ flowchart LR
         EXTRACT --> BRONZE --> GOLD --> PUBLISH
     end
     subgraph WEB["🌐 WEB PÚBLICA · salvandopatitas.org"]
-        WP["WordPress + Elementor<br/>GiveWP + gateway Mercado Pago<br/>42 casos dinámicos (cifras del DW)"]
-        LEADS["Forms → n8n → Brevo (leads)"]
+        WP["WordPress + Elementor<br/>GiveWP + gateway Mercado Pago<br/>casos dinámicos (cifras del DW)"]
+        LEADS["Forms → Brevo (leads)"]
         MEDICION["GTM → GA4 + Meta Pixel"]
-    end
-    subgraph GCP["☁️ GCP · solo medición (alimenta Orion)"]
-        BQ["BigQuery<br/>export GA4<br/>dataset «psicología del dar»"]
     end
     SF -- "JWT Bearer" --> EXTRACT
     PUBLISH -- "POST /fsp/v1/caso/sync" --> WP
-    MEDICION --> BQ
     JOB["Azure Container App Job · caj-fsp-dw (cron 8h)<br/>ACR · Key Vault · Service Principal · Log Analytics"]
     JOB -. orquesta .-> EXTRACT
     JOB -. orquesta .-> GOLD
@@ -187,7 +183,6 @@ flowchart TD
         subgraph COMPUTE["Cómputo"]
             ACR["Container Registry acrsalvandopatitas"]
             JOB["Container App Job caj-fsp-dw<br/>cron 8h · pay-per-run"]
-            VMN8N["VM vm-n8n-prod (n8n)"]
         end
         subgraph DATA["Datos (DW)"]
             ADLS["ADLS Gen2 stsalvandopatitasdw<br/>raw · synapse (Delta bronze)"]
@@ -227,10 +222,9 @@ flowchart LR
     DW[("DW Synapse gold")] -- "ACJ: POST directo → WP REST (SCF)" --> SNIP --> TPL
     DONANTE["👤 Donante"] --> GIVE -- Checkout --> MP["Mercado Pago"]
     MP -- "IPN" --> GIVE
-    FORM -- "webhook fsp-lead-form" --> N8N["n8n"] -- upsert --> BREVO["Brevo"]
+    FORM -- "captura de lead" --> BREVO["Brevo"]
     GTM["GTM-TCQXDTVB"] --> GA4["GA4"]
     GTM --> PIXEL["Meta Pixel"]
-    GA4 -. "export (GCP propio · medición/Orion)" .-> BQ["BigQuery (psicología del dar)"]
     WP --- GTM
 ```
 

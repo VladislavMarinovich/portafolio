@@ -6,7 +6,7 @@
 %% La vitrina pública: WordPress + Elementor en Hostinger. Es una
 %% "vitrina pasiva" — lee cifras del DW vía SCF, no calcula nada.
 %% Tres flujos: publicación de cifras (DW→WP), donación (GiveWP→MP),
-%% captura de leads (Forms→n8n→Brevo), y medición (GTM→GA4+Pixel).
+%% captura de leads (Forms→Brevo), y medición (GTM→GA4+Pixel).
 %% =====================================================================
 flowchart LR
 
@@ -29,11 +29,9 @@ flowchart LR
     GIVE -- "recibo on-brand" --> DONANTE
 
     %% --- 3 · Leads ---
-    FORM -- "webhook fsp-lead-form" --> N8N["n8n"]
-    N8N -- "upsert + segmentos" --> BREVO["Brevo<br/>(email marketing)"]
+    FORM -- "captura de lead" --> BREVO["Brevo<br/>(email marketing)"]
 
     %% --- 4 · Medición ---
     GTM["GTM-TCQXDTVB"] --> GA4["GA4 G-SL8S2MGE8S"]
     GTM --> PIXEL["Meta Pixel"]
-    GA4 -. "export (proyecto GCP propio · medición/Orion)" .-> BQ["BigQuery<br/>(dataset psicología del dar)"]
     WP --- GTM
