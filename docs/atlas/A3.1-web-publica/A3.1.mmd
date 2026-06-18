@@ -1,0 +1,39 @@
+%% =====================================================================
+%% A3.1 · Sistema Web Pública — salvandopatitas.org
+%% Familia A (Arquitectura técnica) · Atlas de Sistema
+%% Repo que documenta: salvandopatitas/wp-child-theme (WordPress)
+%% -----------------------------------------------------------------
+%% La vitrina pública: WordPress + Elementor en Hostinger. Es una
+%% "vitrina pasiva" — lee cifras del DW vía SCF, no calcula nada.
+%% Tres flujos: publicación de cifras (DW→WP), donación (GiveWP→MP),
+%% captura de leads (Forms→n8n→Brevo), y medición (GTM→GA4+Pixel).
+%% =====================================================================
+flowchart LR
+
+    subgraph WP["🌐 WordPress · Hostinger (prod + staging)"]
+        CORE["Elementor Pro · SCF · Rank Math · LiteSpeed"]
+        SNIP["Snippets FSP 01-07<br/>(Data Layer · Shortcodes · REST API · fixes)"]
+        TPL["Template Single Caso<br/>cifras por caso (lee SCF)"]
+        FORM["Forms Elementor<br/>(captura de leads)"]
+        GIVE["GiveWP 7<br/>form de donación"]
+    end
+
+    %% --- 1 · Publicación de cifras (desde el DW) ---
+    DW[("DW · Synapse gold")] -- "ACJ: POST directo → WP REST (SCF)" --> SNIP
+    SNIP --> TPL
+
+    %% --- 2 · Donación ---
+    DONANTE["👤 Donante"] --> GIVE
+    GIVE -- "Checkout" --> MP["Mercado Pago<br/>(gateway lknmp)"]
+    MP -- "IPN estado" --> GIVE
+    GIVE -- "recibo on-brand" --> DONANTE
+
+    %% --- 3 · Leads ---
+    FORM -- "webhook fsp-lead-form" --> N8N["n8n"]
+    N8N -- "upsert + segmentos" --> BREVO["Brevo<br/>(email marketing)"]
+
+    %% --- 4 · Medición ---
+    GTM["GTM-TCQXDTVB"] --> GA4["GA4 G-SL8S2MGE8S"]
+    GTM --> PIXEL["Meta Pixel"]
+    GA4 -. "export (proyecto GCP propio · medición/Orion)" .-> BQ["BigQuery<br/>(dataset psicología del dar)"]
+    WP --- GTM

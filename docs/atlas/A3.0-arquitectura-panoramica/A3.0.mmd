@@ -1,0 +1,50 @@
+%% =====================================================================
+%% A3.0 · Arquitectura Tecnológica — Vista Panorámica Modular
+%% Familia A (Arquitectura técnica) · Atlas de Sistema · Salvando Patitas
+%% Equivalente C4 "Container Diagram" en notación flowchart.
+%% -----------------------------------------------------------------
+%% PIVOTE 100% AZURE (jun 2026): el Data Warehouse analítico corre en
+%% Azure (Delta Lake + Synapse serverless). BigQuery YA NO es el DW;
+%% solo sobrevive como destino del export GA4 para medición/Orion.
+%% Fuente de verdad: Confluence SOSV2 pág 26411010 + 28704770.
+%% =====================================================================
+flowchart LR
+
+    %% --- OPERACIÓN: sistema transaccional (OLTP) -------------------
+    subgraph OLTP["🟦 OPERACIÓN · OLTP (Salesforce)"]
+        SF["Salesforce<br/>org salvando-patitas<br/>Case · Donación · Gasto · Pago"]
+        CONSOLA["Consola SOS<br/>LWC caseDetailPage"]
+        SF --- CONSOLA
+    end
+
+    %% --- ANALÍTICA: Data Warehouse en Azure (OLAP) -----------------
+    subgraph OLAP["🟩 ANALÍTICA · OLAP (Azure)"]
+        EXTRACT["extract.py<br/>SF REST · JWT Bearer<br/>watermark incremental"]
+        BRONZE["ADLS Gen2 · Delta Lake<br/>(bronze)"]
+        GOLD["Synapse serverless · vistas gold<br/>ficha_caso · ficha_caso_gastos"]
+        PUBLISH["Publicación directa → WP<br/>el ACJ hace el POST (SCF)"]
+        EXTRACT --> BRONZE --> GOLD --> PUBLISH
+    end
+
+    %% --- WEB PÚBLICA: vitrina pasiva -------------------------------
+    subgraph WEB["🌐 WEB PÚBLICA · salvandopatitas.org"]
+        WP["WordPress + Elementor<br/>GiveWP + gateway Mercado Pago<br/>42 casos dinámicos (cifras del DW)"]
+        LEADS["Forms → n8n → Brevo (leads)"]
+        MEDICION["GTM → GA4 + Meta Pixel"]
+    end
+
+    %% --- GCP: SOLO medición (no es el DW) --------------------------
+    subgraph GCP["☁️ GCP · solo medición (alimenta Orion)"]
+        BQ["BigQuery<br/>export GA4<br/>dataset «psicología del dar»"]
+    end
+
+    %% --- Flujos entre containers -----------------------------------
+    SF -- "JWT Bearer" --> EXTRACT
+    PUBLISH -- "POST /fsp/v1/caso/sync" --> WP
+    MEDICION --> BQ
+
+    %% --- Orquestación serverless -----------------------------------
+    JOB["Azure Container App Job · caj-fsp-dw (cron 8h)<br/>ACR acrsalvandopatitas · Key Vault kv-salvandopatitas<br/>Service Principal sp-fsp-dw · Log Analytics"]
+    JOB -. orquesta .-> EXTRACT
+    JOB -. orquesta .-> GOLD
+    JOB -. orquesta .-> PUBLISH

@@ -1,0 +1,40 @@
+%% =====================================================================
+%% E1 · Loop de Transparencia Radical · v2
+%% Familia E (Loops / Integraciones) · Atlas de Sistema · Salvando Patitas
+%% -----------------------------------------------------------------
+%% Salesforce es el MASTER ÚNICO. Hay 2 puertas de entrada de
+%% donaciones (online y offline) que convergen en una APROBACIÓN
+%% dentro de SF antes de ser definitivas. De ahí el DW publica las
+%% cifras a la vitrina pública → el donante ve trazabilidad E2E.
+%% El loop cierra cuando esa transparencia incentiva nuevas donaciones
+%% (mecanismo económico de la tesis: asimetría demanda/capacidad).
+%% =====================================================================
+flowchart LR
+
+    %% --- Puertas de entrada ----------------------------------------
+    subgraph ENTRADA["Puertas de entrada"]
+        ONLINE["🟢 Online<br/>GiveWP + Mercado Pago"]
+        OFFLINE["🟠 Offline<br/>registro manual (coordinadora)"]
+    end
+
+    APROB{"Aprobación<br/>en Salesforce"}
+    SF["Salesforce · master único<br/>Donación validada"]
+
+    %% --- DW analítico (Azure) --------------------------------------
+    subgraph DW["DW analítico · Azure"]
+        SYN["Synapse gold<br/>ficha_caso"]
+    end
+
+    WP["Vitrina pública · solo muestra cifras<br/>(no origina donaciones)"]
+    CIUDADANO["👤 Donante / ciudadano<br/>ve trazabilidad extremo a extremo"]
+
+    %% --- Flujo del loop --------------------------------------------
+    ONLINE  --> APROB
+    OFFLINE --> APROB
+    APROB -- "aprobada" --> SF
+    SF -- "JWT · cron 8h" --> SYN
+    SYN -- "publicación directa (ACJ)" --> WP
+    WP --> CIUDADANO
+    %% La transparencia es un INCENTIVO económico, no un flujo técnico:
+    %% el donante motivado re-entra por las puertas → SIEMPRE pasa por SF.
+    CIUDADANO -. "incentiva nueva donación → re-entra por las puertas" .-> ENTRADA

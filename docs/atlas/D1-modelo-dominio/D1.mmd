@@ -1,0 +1,55 @@
+%% =====================================================================
+%% D1 · Modelo de dominio — Salvando Patitas
+%% Familia D (Datos / Modelo de dominio) · Atlas de Sistema
+%% -----------------------------------------------------------------
+%% Regla raíz: el CASO PADRE es el consolidado; los CASOS HIJOS son
+%% las intervenciones (Veterinaria / Hogar de paso / Adopción).
+%% - Donaciones se asocian al PADRE (presupuesto del caso).
+%% - Gastos y Pagos se asocian al HIJO (intervención concreta).
+%% - Los rollups financieros viven en el PADRE (single source of truth).
+%% - Fecha_Cierre_Operativo es la fuente única de cierre del caso:
+%%   detiene las fórmulas de tiempo (días en vet / hogar / rescate).
+%% =====================================================================
+erDiagram
+
+    CASE_PADRE   ||--o{ CASE_HIJO     : "agrupa intervenciones"
+    CASE_PADRE   ||--o{ DONACION      : "recibe (al padre)"
+    CASE_HIJO    ||--o{ GASTO         : "genera (en el hijo)"
+    CASE_HIJO    ||--o{ PAGO          : "salda (en el hijo)"
+    CUENTA_FONDOS||--o{ DONACION      : "asigna ingreso"
+    CUENTA_FONDOS||--o{ PAGO          : "desembolsa"
+
+    CASE_PADRE {
+        string CaseNumber
+        string Animal
+        date   Fecha_Rescate
+        date   Fecha_Cierre_Operativo "fuente unica de cierre"
+        number Total_Donado  "rollup"
+        number Total_Gastado "rollup"
+        number Total_Pagado  "rollup"
+        number Deuda_Proveedor "rollup (faltante por pagar)"
+    }
+    CASE_HIJO {
+        string Tipo "Veterinaria | Hogar | Adopcion"
+        date   Fecha_ingreso_veterinaria
+        date   Fecha_alta_medica
+        date   Fecha_Ingreso_Hogar
+        date   Fecha_Salida_Hogar
+    }
+    DONACION {
+        number Monto
+        string Metodo_Pago
+        date   Fecha
+    }
+    GASTO {
+        number Monto
+        string Tipo_Gasto "Veterinaria | Hogar | Transporte | Administrativo | ..."
+        string Comprobante_Azure "URL Blob (archivos-privado)"
+    }
+    PAGO {
+        number Monto
+        date   Fecha
+    }
+    CUENTA_FONDOS {
+        string Nombre "Fondo General SOS | Nequi"
+    }

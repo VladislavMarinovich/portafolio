@@ -1,0 +1,51 @@
+%% =====================================================================
+%% D2 · Data Platform — Data Warehouse analítico (100% Azure)
+%% Familia D (Datos) · Atlas de Sistema · Salvando Patitas
+%% -----------------------------------------------------------------
+%% Pipeline serverless SF → Delta Lake → Synapse → WordPress.
+%% Orquestado por el Container App Job (entrypoint): extract.py → SQL directo
+%% (construcción de silver + gold, serverless-safe) → publicación DIRECTA a WordPress.
+%% Nota: dbt se intentó y se DESCARTÓ — falla con "rename" en Synapse serverless.
+%% Verificado en logs de prod (última corrida: 46 casos, 0 errores).
+%% Costo del DW ≈ 0.09 USD/año (es serverless, paga por consulta).
+%% =====================================================================
+flowchart TD
+
+    SF[("Salesforce<br/>Case · Donación · Gasto · Pago")]
+
+    %% --- 1 · Ingesta incremental -----------------------------------
+    subgraph INGEST["1 · Ingesta"]
+        EX["extract.py<br/>SF REST · JWT Bearer<br/>delta-rs · schema_mode merge<br/>watermark incremental"]
+    end
+
+    %% --- 2 · Lake (capa bronze) ------------------------------------
+    subgraph LAKE["2 · Lake · ADLS Gen2"]
+        BR["Delta Lake · bronze"]
+    end
+
+    %% --- 3 · Transformación por SQL directo ------------------------
+    subgraph TRANSFORM["3 · Transformación (SQL directo · serverless-safe)"]
+        RUN["Construcción silver + gold<br/>SQL directo · serverless-safe"]
+        STG["silver · casos/donaciones/gastos/pagos"]
+        FC["ficha_caso"]
+        FCG["ficha_caso_gastos"]
+        RUN --> STG --> FC & FCG
+    end
+
+    %% --- 4 · Publicación a la vitrina ------------------------------
+    subgraph PUB["4 · Publicación"]
+        PB["Publicación DIRECTA → WordPress (SCF)<br/>el job hace el POST (WP App Password)<br/>excluye Fondo General · throttle anti-WAF"]
+    end
+
+    WP[("WordPress SCF<br/>/wp-json/fsp/v1/caso/sync")]
+
+    SF -->|JWT Bearer| EX --> BR --> RUN
+    FC  --> PB
+    FCG --> PB
+    PB  --> WP
+
+    %% --- Orquestación serverless -----------------------------------
+    ORQ["Azure Container App Job · caj-fsp-dw · cron 8h<br/>entrypoint: extract.py → SQL directo (silver+gold) → POST directo a WP<br/>ACR · KV kv-salvandopatitas · Service Principal sp-fsp-dw · Log Analytics"]
+    ORQ -. orquesta .-> EX
+    ORQ -. orquesta .-> RUN
+    ORQ -. orquesta .-> PB

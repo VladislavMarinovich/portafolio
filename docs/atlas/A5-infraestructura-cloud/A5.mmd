@@ -1,0 +1,50 @@
+%% =====================================================================
+%% A5 · Infraestructura Cloud (Azure) — Salvando Patitas
+%% Familia A (Arquitectura técnica) · Atlas de Sistema
+%% Repo que documenta: salvandopatitas/fsp-infra (IaC · Terraform)
+%% -----------------------------------------------------------------
+%% Topología de la infra Azure de PRODUCCIÓN que sostiene el DW
+%% analítico (100% Azure). Todo serverless / pay-per-use salvo la VM
+%% de n8n. Sin secretos en código: viven en Key Vault.
+%% =====================================================================
+flowchart TD
+
+    subgraph RG["☁️ Azure · Resource Group prod FSP"]
+
+        subgraph AUTH["Identidad y secretos"]
+            KV["Key Vault<br/>kv-salvandopatitas<br/>(secretos: SF JWT · Synapse · WP App Password)"]
+            SP["Service Principal<br/>sp-fsp-dw<br/>(auth Azure: client id/secret)"]
+        end
+
+        subgraph COMPUTE["Cómputo"]
+            ACR["Container Registry<br/>acrsalvandopatitas<br/>(imagen del job)"]
+            JOB["Container App Job<br/>caj-fsp-dw<br/>cron cada 8h · pay-per-run"]
+            VMN8N["VM · vm-n8n-prod<br/>(n8n · always-on)"]
+        end
+
+        subgraph DATA["Datos (DW)"]
+            ADLS["ADLS Gen2 · stsalvandopatitasdw<br/>containers: raw · synapse<br/>(Delta Lake bronze)"]
+            SYN["Synapse serverless<br/>syn-salvandopatitas-prod · DB fsp_dw<br/>(vistas gold)"]
+            BLOB["Blob · archivos-publico / archivos-privado<br/>(adjuntos de casos · SAS 60min PII · Ley 1581)"]
+        end
+
+        OBS["Log Analytics<br/>(observabilidad del job)"]
+    end
+
+    %% --- Relaciones ---
+    ACR -- "imagen" --> JOB
+    SP -- "lee secretos" --> KV
+    JOB -- "usa" --> SP
+    JOB -- "escribe Delta" --> ADLS
+    JOB -- "construye silver+gold (SQL directo)" --> SYN
+    SYN -- "OPENROWSET" --> ADLS
+    JOB -- "logs" --> OBS
+    SP -- "auth Synapse (pyodbc)" --> SYN
+
+    %% --- Bordes del sistema (no son infra Azure, contexto) ---
+    SF[("Salesforce<br/>(origen · JWT Bearer)")]
+    WP[("WordPress<br/>(destino · POST directo del ACJ)")]
+    SF -. extrae .-> JOB
+    JOB -. publica .-> WP
+
+    %% Costo del DW ≈ 0.09 USD/año (serverless); Azure total ~38-70 USD/mes (≈99% es la VM de n8n)
