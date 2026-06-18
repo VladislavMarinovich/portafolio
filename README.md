@@ -71,14 +71,14 @@ flowchart LR
 
 ## 📦 Repositorios
 
-> Cada repo tiene su **ficha pública**. El código privado (🔒) se solicita **por repo** desde su ficha; la App (🌐) es pública.
+> Cada repo tiene su **ficha pública**. El código privado (🔒) se solicita **por repo** desde su ficha; **infra** queda restringido por seguridad (solo diagrama); la App (🌐) es pública.
 
 | Repo | Qué es | Stack | Ficha |
 |---|---|---|---|
-| **Consola Operativa SOS** | Gestión end-to-end del caso (Salesforce) | Apex · LWC · Flows | [📄 ver ficha](docs/repos/consola.md) · 🔒 |
-| **Data Warehouse** | Warehouse analítico · medallón bronze/silver/gold | Synapse serverless · SQL directo | [📄 ver ficha](docs/repos/data-warehouse.md) · 🔒 |
-| **Infraestructura** | IaC · DW + pipeline + observabilidad | Terraform · Azure | [📄 ver ficha](docs/repos/fsp-infra.md) · 🔒 |
-| **App de Reporte Ciudadano** | Puerta de entrada del dato | React · TypeScript · Supabase | [📄 ver ficha](docs/repos/app.md) · 🌐 |
+| **Consola Operativa SOS** | Gestión end-to-end del caso (Salesforce) | Apex · LWC · Flows | [📄 ver ficha](docs/repos/consola.md) · 🔒 acceso por solicitud |
+| **Data Warehouse** | Warehouse analítico · medallón bronze/silver/gold | Synapse serverless · SQL directo | [📄 ver ficha](docs/repos/data-warehouse.md) · 🔒 acceso por solicitud |
+| **Infraestructura** | IaC · DW + pipeline + observabilidad | Terraform · Azure | [📄 ver ficha](docs/repos/fsp-infra.md) · 🔒 restringido (solo diagrama) |
+| **App de Reporte Ciudadano** | Puerta de entrada del dato | React · TypeScript · Supabase | [📄 ver ficha](docs/repos/app.md) · 🌐 público |
 
 ---
 

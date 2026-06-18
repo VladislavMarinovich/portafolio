@@ -2,9 +2,7 @@
 
 # ☁️ Infraestructura como código
 
-**`salvandopatitas/fsp-infra`** · 🔒 repo privado
-
-[![Solicitar acceso](https://img.shields.io/badge/🔑_Solicitar_acceso_a_infra-abrir_solicitud-2ea44f?style=for-the-badge)](https://github.com/VladislavMarinovich/portafolio/issues/new?template=solicitar-acceso.yml&title=%5BAcceso%5D+Infraestructura)
+**`salvandopatitas/fsp-infra`** · 🔒 repo restringido (sin acceso al código — [ver por qué](#-por-qué-este-repo-no-se-comparte))
 
 </div>
 
@@ -16,26 +14,48 @@ El **Terraform** que describe y adopta la plataforma de datos de la Fundación e
 
 **Stack:** Terraform · Azure · 100% serverless / pay-per-use.
 
+## Topología (diagrama A5)
+
+```mermaid
+flowchart TD
+    subgraph RG["☁️ Azure · Resource Group prod FSP"]
+        subgraph AUTH["Identidad y secretos"]
+            KV["Key Vault<br/>kv-salvandopatitas<br/>(secretos: SF JWT · Synapse · WP App Password)"]
+            SP["Service Principal<br/>sp-fsp-dw<br/>(auth Azure)"]
+        end
+        subgraph COMPUTE["Cómputo"]
+            ACR["Container Registry<br/>acrsalvandopatitas"]
+            JOB["Container App Job<br/>caj-fsp-dw · cron 8h · pay-per-run"]
+        end
+        subgraph DATA["Datos (DW)"]
+            ADLS["ADLS Gen2 · stsalvandopatitasdw<br/>(Delta Lake bronze)"]
+            SYN["Synapse serverless<br/>syn-salvandopatitas-prod (vistas gold)"]
+            BLOB["Blob · archivos-publico / privado<br/>(adjuntos · SAS · Ley 1581)"]
+        end
+        OBS["Log Analytics"]
+    end
+    ACR -- imagen --> JOB
+    SP -- lee secretos --> KV
+    JOB -- usa --> SP
+    JOB -- escribe Delta --> ADLS
+    JOB -- "construye silver+gold (SQL directo)" --> SYN
+    SYN -- OPENROWSET --> ADLS
+    JOB -- logs --> OBS
+    SF[("Salesforce<br/>origen · JWT")] -. extrae .-> JOB
+    JOB -. publica directo .-> WP[("WordPress<br/>destino · SCF")]
+```
+
 ## Principios
 
-| Principio | Detalle |
-|---|---|
-| **NO recrear producción** | La infra ya existe; el repo la **adopta** en el estado (`terraform import`), no la levanta de cero. `terraform plan` debe salir **sin cambios** antes de cualquier `apply`. |
-| **Nunca apply sobre prod sin sandbox** | Todo cambio real se valida primero en un entorno de pruebas. |
-| **Secretos solo en Key Vault** | Las credenciales (SF JWT, WP App Password, Service Principal) **no** viven en el repo ni en el estado; Terraform gestiona el vault y los permisos, nunca los valores. |
-| **Estado remoto** | `azurerm` backend en el Data Lake (`tfstate`). |
+- **NO recrear producción** — el repo **adopta** la infra existente (`terraform import`); `plan` debe salir sin cambios antes de cualquier `apply`.
+- **Secretos solo en Key Vault** — nunca en el repo ni en el estado.
+- **Estado remoto** en el Data Lake (`azurerm` backend).
 
-## Recursos que describe
+## 🔒 Por qué este repo NO se comparte
 
-Resource Group · Storage Accounts (ADLS Gen2) · Synapse serverless · Key Vault (RBAC) · Container Registry · Service Principal + roles (AcrPull, KV Secrets User) · Container App Environment + Job (cron 8h) · Log Analytics.
+A diferencia de los demás, el código de infraestructura **no tiene acceso por solicitud — y es deliberado.** Este repo describe la **topología exacta de producción** y su postura de seguridad (identidades, políticas, endpoints, manejo de secretos). Exponerlo, incluso en solo lectura, equivaldría a entregar el **mapa de la superficie de ataque** del sistema.
 
-## Diagramas
-
-- [Infraestructura cloud (A5)](../atlas/README.md#a5--infraestructura-cloud-azure)
-
-## 🔑 Acceso al código
-
-Repo privado. **[Abre una solicitud →](https://github.com/VladislavMarinovich/portafolio/issues/new?template=solicitar-acceso.yml&title=%5BAcceso%5D+Infraestructura)** o escribe a [vladislav@marinovich.co](mailto:vladislav@marinovich.co?subject=Acceso%20Infraestructura).
+Por eso aquí mostramos **la arquitectura** (el diagrama de arriba) y los **principios** de diseño, pero **no el detalle de implementación**. Es el principio de **mínima exposición**: se comparte lo necesario para entender el sistema, no para vulnerarlo.
 
 ---
 
