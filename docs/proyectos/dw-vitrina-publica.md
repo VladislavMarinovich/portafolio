@@ -23,12 +23,13 @@ La promesa de **transparencia radical**: cada peso donado, trazable públicament
 ```mermaid
 flowchart LR
     SF[("Salesforce<br/>Case · Donación · Gasto · Pago")]
-    SF -->|extractor incremental · JWT| BRONZE["🥉 bronze<br/>Delta crudo"]
+    SF -->|JWT| EXTRACT["extractor incremental<br/>(extract.py)"]
+    EXTRACT --> BRONZE["🥉 bronze<br/>Delta crudo"]
     BRONZE -->|SQL directo| SILVER["🥈 silver<br/>limpio + dedupe por Id"]
     SILVER -->|SQL directo| GOLD["🥇 gold<br/>ficha_caso · ficha_caso_gastos"]
     GOLD -->|POST directo del Job| WP[("🌐 WordPress<br/>vitrina pública")]
     JOB["⚙️ Azure Container App Job · cron 8h"]
-    JOB -.orquesta.-> BRONZE
+    JOB -.orquesta.-> EXTRACT
     JOB -.orquesta.-> SILVER
     JOB -.orquesta.-> GOLD
     JOB -.publica.-> WP

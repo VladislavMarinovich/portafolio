@@ -15,15 +15,17 @@ _De la ingesta del dato a la decisión — arquitectura, ingeniería de datos e 
 ---
 
 > **Cómo leer este portafolio — 3 niveles de profundidad:**
-> 🟢 **Nivel 1 · Visión** (aquí) · qué hacemos, productos, potencial e investigación.
+> 🟢 **Nivel 1 · Visión** (aquí) · qué construí, productos, potencial e investigación.
 > 🔵 **Nivel 2 · Arquitectura** · cada [ficha de proyecto](#-los-proyectos) y el [atlas](docs/atlas/): diagramas, diccionario de datos, dominio y máquinas de estado (todo público).
 > 🔒 **Nivel 3 · El código** · los repos privados, por **solicitud de acceso** desde cada ficha.
 
 ---
 
-## 🎯 Qué hacemos
+## 🎯 Qué construí
 
-El sector de protección animal de LATAM opera **a ciegas**: sin trazabilidad del dinero, sin datos de operación, sin forma de demostrar impacto. Construimos el **sistema de información que cambia eso** — uno donde cada peso donado es **trazable públicamente** desde la donación hasta la factura del veterinario, y donde la operación se mide para decidir mejor.
+El sector de protección animal de LATAM opera **a ciegas**: sin trazabilidad del dinero, sin datos de operación, sin forma de demostrar impacto. **Diseñé y construí el sistema de información que cambia eso** — de la ingesta del dato a la decisión, **end-to-end y como arquitecto único**: cada peso donado, trazable públicamente desde la donación hasta la factura del veterinario; la operación, medida para decidir mejor.
+
+Soy **CTO y cofundador** de la Fundación Salvando Patitas: la misión y los rescates son del equipo; **la arquitectura y el código del sistema son míos.**
 
 **Métrica norte: vidas salvadas por peso invertido.** Marco: *design science* + sistemas de información (datos reales de campo, no de laboratorio).
 
