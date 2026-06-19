@@ -69,7 +69,7 @@ flowchart LR
 
 - **Trazabilidad pública *policy-grade***: cómo diseñar la transparencia de un sistema social para que sostenga la confianza y la captación de recursos (bajo Ley 1581 / Habeas Data).
 - **Dataset georreferenciado original** de reportes ciudadanos del Caribe colombiano — datos que no existían.
-- **Triage por visión artificial**: de la foto del reporte a una **sospecha de gravedad/condición** (decision-support, nunca diagnóstico). El par `evidencia (foto) ↔ diagnóstico del vet` es dato de entrenamiento etiquetado que el propio sistema genera.
+- **Triage por visión artificial**: de la foto del reporte a una **sospecha de gravedad/condición** (decision-support, nunca diagnóstico). Por diseño, el par `evidencia (foto) ↔ diagnóstico del vet` será dato de entrenamiento etiquetado que el sistema generará cuando la App entre en operación.
 
 ## 💎 Activos que pueden emerger
 

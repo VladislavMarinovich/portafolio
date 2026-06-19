@@ -63,7 +63,7 @@ Cada transición queda en `status_history` (quién, qué, cuándo) → trazabili
 | `status_history` | `id` · `report_id` · `from`/`to` · `actor` · `at` | auditoría de transiciones |
 | `profiles` | `id` · `role` (citizen / ngo_admin) | perfil extendido del usuario |
 
-> 💡 **Para investigación:** `evidences.file_url` (foto) + `reports.severity` (etiqueta) + `lat/long` = **par imagen→etiqueta georreferenciado** → la semilla del [dataset público de reportes ciudadanos](dw-dataset-reportes-ciudadanos.md) y del triage por visión.
+> 💡 **Para investigación:** el esquema está **diseñado** para capturar `evidences.file_url` (foto) + `reports.severity` (etiqueta) + `lat/long` = **par imagen→etiqueta georreferenciado** → la base (a futuro) del [dataset público de reportes ciudadanos](dw-dataset-reportes-ciudadanos.md) y del triage por visión.
 
 ## 🔒 Nivel 3 · El código
 

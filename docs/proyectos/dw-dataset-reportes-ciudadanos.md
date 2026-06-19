@@ -20,7 +20,7 @@ En LATAM **no existe** un dataset abierto del sector de protección animal. Este
 
 ### De dónde sale el dato (y por qué es valioso)
 
-El sistema genera **datos etiquetados sin esfuerzo extra**: la [App](app-sos-priorizacion.md) captura **foto + gravedad + geo**, y la [Consola SOS](consola-sos.md) registra el **diagnóstico confirmado por el veterinario** (la etiqueta clínica). El par **foto ↔ etiqueta** es dato de entrenamiento que el propio loop operativo produce.
+Por diseño, el sistema **generará datos etiquetados sin esfuerzo extra**: la [App](app-sos-priorizacion.md) está pensada para capturar **foto + gravedad + geo**, y la [Consola SOS](consola-sos.md) ya registra el **diagnóstico confirmado por el veterinario** (la etiqueta clínica). El par **foto ↔ etiqueta** será el dato de entrenamiento **cuando la App entre en operación** (hoy es MVP, aún sin reportes reales).
 
 ```mermaid
 flowchart LR
@@ -46,7 +46,7 @@ El dataset público es **anonimizado y consentido**; la separación de IP (datos
 
 ## 🔒 Nivel 3 · El código
 
-🚧 **En construcción.** Hoy es la **línea de investigación** y el diseño; el dato crudo ya se acumula en la App (Supabase) y la Consola SOS. El repo del dataset/pipeline de ML se creará en el org `salvandopatitas` cuando arranque la fase de modelos.
+🚧 **En construcción.** Hoy es la **línea de investigación** y el diseño. La **App aún es un MVP — no está capturando reportes reales todavía**; cuando entre en operación empezará a generar el dato. El repo del dataset/pipeline de ML se creará en el org `salvandopatitas` cuando arranque la fase de modelos.
 
 > Es el **moat** del proyecto: el dato sectorial original no se replica fácil.
 
