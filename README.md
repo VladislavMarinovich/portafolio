@@ -29,6 +29,12 @@ Soy **CTO y cofundador** de la Fundación Salvando Patitas: la misión y los res
 
 **Métrica norte: vidas salvadas por peso invertido.** Marco: *design science* + sistemas de información (datos reales de campo, no de laboratorio).
 
+## 🧠 Lo que lo vuelve investigación: la capa de decisión
+
+Construir el sistema es **ingeniería** — necesaria, pero no es, por sí sola, la tesis. Lo que convierte esto en un **proyecto de investigación** es la **capa de inteligencia** que vive encima: decidir, bajo **incertidumbre y presupuesto finito**, *qué caso atender* para maximizar el bienestar generado. Es **teoría de colas con restricción presupuestal** + priorización ponderada por **urgencia, valor esperado y sufrimiento**.
+
+Todo lo demás —la infraestructura de transparencia, la plataforma de reportes— es el **ecosistema que hace posible esa capa**. Esa pieza de decisión es la clave, y la original.
+
 ## 🐾 El Patitas Stack
 
 Un sistema end-to-end: desde que un ciudadano reporta un animal en condición crítica hasta que el caso se cierra — con trazabilidad financiera por caso. Su columna vertebral es un **split OLTP/OLAP**: Salesforce decide en tiempo real, un warehouse serverless en Azure computa la historia, y la web es una vitrina pasiva de cifras reales.
@@ -69,6 +75,7 @@ flowchart LR
 
 ## 🔬 Líneas de investigación
 
+- **Asignación de recursos bajo presupuesto — la capa de decisión** *(el núcleo del aporte)*: priorización de casos bajo incertidumbre, con teoría de colas + costo de oportunidad + bienestar (urgencia, valor esperado y sufrimiento) sobre datos de campo reales.
 - **Trazabilidad pública *policy-grade***: cómo diseñar la transparencia de un sistema social para que sostenga la confianza y la captación de recursos (bajo Ley 1581 / Habeas Data).
 - **Dataset georreferenciado original** de reportes ciudadanos del Caribe colombiano — datos que no existían.
 - **Triage por visión artificial**: de la foto del reporte a una **sospecha de gravedad/condición** (decision-support, nunca diagnóstico). Por diseño, el par `evidencia (foto) ↔ diagnóstico del vet` será dato de entrenamiento etiquetado que el sistema generará cuando la App entre en operación.
@@ -82,7 +89,7 @@ flowchart LR
 
 ## 🧩 Los proyectos
 
-> 4 proyectos, **un solo loop** → [🧭 cómo se conecta todo](docs/como-se-conecta.md). Cada ficha está en 3 niveles (visión · arquitectura · código).
+> **El ecosistema que alimenta la capa de decisión** — 4 piezas, un solo loop → [🧭 cómo se conecta todo](docs/como-se-conecta.md). La infraestructura (Consola, DW) es el sustrato **en producción**; la App es la puerta de entrada del dato; y sobre todas vive el **núcleo de decisión**. Cada ficha en 3 niveles (visión · arquitectura · código).
 
 | Proyecto | Qué resuelve | Ficha |
 |---|---|---|
