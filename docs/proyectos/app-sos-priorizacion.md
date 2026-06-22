@@ -25,7 +25,9 @@ Es el inicio del flujo: aquí **nace el dato** que después recorre todo el sist
 
 El flujo ciudadano se diseñó bajo una **restricción dura: un reporte se hace en 30 segundos, o no se hace.** De ahí se deriva cada decisión de UI — y una hipótesis falsable: *menos fricción, más reportes, mejor dataset para el modelo de visión*.
 
-📄 **[Directiva de Diseño completa (DD-2026-03)](directiva-diseno-app.html)** — el flujo de 4 pantallas beat-por-beat, los defaults justificados, los *edge states* y la *kill list*. *(Descárgala y ábrela en el navegador.)*
+📄 **[Ver la Directiva de Diseño (DD-2026-03) →](https://vladislavmarinovich.github.io/portafolio/proyectos/directiva-diseno-app.html)** — el flujo de 4 pantallas beat-por-beat, los defaults justificados, los *edge states* y la *kill list*.
+
+▶️ **[Ver demo navegable del flujo de 30 s →](https://vladislavmarinovich.github.io/portafolio/proyectos/prototipo-app.html)** — prototipo clickeable (sin backend), con tu paleta de la Directiva.
 
 **Flujo ciudadano de reporte** *(mockup)* — el triage de gravedad en origen:
 
