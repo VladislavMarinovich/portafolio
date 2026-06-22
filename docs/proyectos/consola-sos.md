@@ -18,10 +18,6 @@ El **cerebro operativo** de la Fundación. Gestiona el ciclo de vida completo de
 
 > Capturas reales del sistema en operación. *Nombres de donantes y proveedores difuminados por Habeas Data (Ley 1581).*
 
-**Resumen del caso** — KPIs vitales + evolución de donaciones:
-
-![Consola — Resumen del caso](img/consola-01-ficha.png)
-
 **Pestaña Veterinaria** — seguimiento clínico:
 
 ![Consola — Veterinaria](img/consola-03-veterinaria.png)
