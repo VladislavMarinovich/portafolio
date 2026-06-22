@@ -30,6 +30,10 @@ El **cerebro operativo** de la Fundación. Gestiona el ciclo de vida completo de
 
 ![Consola — Veterinaria](img/consola-03-veterinaria.png)
 
+**Acción operativa** — registrar una donación (campos de contacto y método de pago difuminados):
+
+![Consola — Registrar donación](img/consola-04-accion.png)
+
 **Selector de caso hijo** — alternar entre Rescate / Veterinaria / Hogar de paso:
 
 ![Consola — Selector de caso hijo](img/consola-05-selector.png)
