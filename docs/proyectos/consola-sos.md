@@ -14,6 +14,30 @@
 
 El **cerebro operativo** de la Fundación. Gestiona el ciclo de vida completo de cada rescate —del reporte a la adopción— con **trazabilidad financiera por caso**: cada donación, gasto y pago queda vinculado al animal que lo originó. Es la fuente operativa de verdad del sistema.
 
+## 📸 La Consola funcionando
+
+> Capturas reales del sistema en operación. *Nombres de donantes y proveedores difuminados por Habeas Data (Ley 1581).*
+
+**Resumen del caso** — KPIs vitales + evolución de donaciones:
+
+![Consola — Resumen del caso](img/consola-01-ficha.png)
+
+**Pestaña Finanzas** — balance y movimientos por caso:
+
+![Consola — Finanzas](img/consola-02-finanzas.png)
+
+**Pestaña Veterinaria** — seguimiento clínico:
+
+![Consola — Veterinaria](img/consola-03-veterinaria.png)
+
+**Acción operativa** — registrar una donación (campos de contacto y método de pago difuminados):
+
+![Consola — Registrar donación](img/consola-04-accion.png)
+
+**Selector de caso hijo** — alternar entre Rescate / Veterinaria / Hogar de paso:
+
+![Consola — Selector de caso hijo](img/consola-05-selector.png)
+
 ## 🔵 Nivel 2 · Arquitectura
 
 *(Todo este nivel es público: modelo, máquinas de estado, reglas. El código vivo es el Nivel 3.)*
