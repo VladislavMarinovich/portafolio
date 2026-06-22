@@ -67,6 +67,23 @@ flowchart LR
 
 📐 **[Atlas completo de arquitectura →](docs/atlas/)** · 6 diagramas (panorámica, dominio, data platform, infraestructura, web y el loop de transparencia).
 
+## 📸 El sistema, funcionando
+
+**Consola SOS — el cerebro operativo, corriendo en producción** *(capturas reales; nombres de donantes y proveedores difuminados por Habeas Data):*
+
+![Consola — Resumen del caso](docs/proyectos/img/consola-01-ficha.png)
+
+![Consola — Finanzas por caso](docs/proyectos/img/consola-02-finanzas.png)
+
+→ Veterinaria, acción y selector de caso hijo en la **[ficha de la Consola](docs/proyectos/consola-sos.md)**.
+
+**App de reportes ciudadanos — en diseño, con prototipo navegable:**
+
+- ▶️ **[Demo navegable del flujo de 30 s →](https://vladislavmarinovich.github.io/portafolio/proyectos/prototipo-app.html)** · prototipo clickeable (sin backend)
+- 📄 **[Directiva de Diseño (DD-2026-03) →](https://vladislavmarinovich.github.io/portafolio/proyectos/directiva-diseno-app.html)** · la restricción de 30 s, el flujo, los *edge states* y la *kill list*
+
+→ detalle en la **[ficha de la App](docs/proyectos/app-sos-priorizacion.md)**.
+
 ## 🚀 Potencial
 
 - **Infraestructura reutilizable** para el sector animalista de LATAM — un terreno **sin benchmark regional**. Lo construido para una fundación es replicable para muchas.
