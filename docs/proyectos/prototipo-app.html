@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototipo · App SOS — Salvando Patitas</title>
+<style>
+  :root{
+    --cream:#F2EDE0; --paper:#FBF8F1; --ink:#1A1612; --ink2:#3A332A;
+    --mute:#857968; --hair:#D8CFBC; --primary:#D9542B; --bad:#A8281B;
+    --warn:#B4751A; --good:#3F7A3F;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(120% 80% at 50% 0%,#EFE7D6,#E4DAC6);font-family:var(--sans);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:32px 16px}
+  .head{text-align:center;max-width:420px}
+  .head .k{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--primary);font-weight:600}
+  .head h1{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.1;margin:8px 0 6px}
+  .head p{font-size:13px;color:var(--mute);line-height:1.5}
+
+  /* timer */
+  .timer{width:300px;max-width:84vw}
+  .timer .bar{height:4px;background:var(--hair);border-radius:99px;overflow:hidden}
+  .timer .fill{height:100%;width:0;background:var(--primary);border-radius:99px;transition:width .5s ease}
+  .timer .lab{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--mute);letter-spacing:.08em;margin-top:6px}
+  .timer .lab b{color:var(--ink)}
+
+  /* phone */
+  .phone{height:min(82vh,620px);aspect-ratio:9/19;max-width:90vw;background:#0d0b09;border-radius:34px;padding:7px;box-shadow:0 30px 60px -30px rgba(26,22,18,.55),0 8px 20px -14px rgba(26,22,18,.3);position:relative}
+  .screenwrap{width:100%;height:100%;background:var(--paper);border-radius:27px;overflow:hidden;position:relative}
+  .notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:84px;height:20px;background:#000;border-radius:99px;z-index:20}
+  .scr{position:absolute;top:0;right:0;bottom:0;left:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .35s ease}
+  .scr.on{opacity:1;pointer-events:auto}
+  .status{padding:14px 20px 0;display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;font-weight:600;z-index:5}
+  .tap{cursor:pointer}
+
+  /* S1 home armada */
+  .s1{background:#0c0a08;color:#fff;justify-content:flex-start;overflow:hidden}
+  .s1::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;background:radial-gradient(120% 60% at 50% 30%,rgba(217,84,43,.20),transparent 60%),linear-gradient(180deg,#1a1410,#0c0a08 62%)}
+  .s1 .status{color:#fff}
+  .lensarea{flex:1;display:flex;align-items:center;justify-content:center;position:relative}
+  .lens{position:relative;width:118px;height:118px;border-radius:99px;border:2px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:40px;color:#fff}
+  .lens::after{content:"";position:absolute;inset:-12px;border-radius:99px;border:1px dashed rgba(217,84,43,.5);animation:pulse 2.2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.07);opacity:1}}
+  .s1 .label{position:relative;text-align:center;padding:0 22px 18px;color:#E9E2D1}
+  .s1 .label .kk{font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--primary);font-weight:700;margin-bottom:6px}
+  .s1 .label .tt{font-family:var(--serif);font-size:24px;line-height:1.1}
+  .cta{margin:0 18px 14px;background:var(--primary);color:#fff;padding:17px;text-align:center;border-radius:14px;font-weight:600;font-size:15px;box-shadow:0 12px 24px -12px rgba(217,84,43,.7)}
+  .cta small{display:block;font-family:var(--mono);font-size:8px;letter-spacing:.16em;opacity:.85;margin-top:4px;text-transform:uppercase}
+  .alt{text-align:center;padding:0 0 16px;font-family:var(--mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+
+  /* S2 camera */
+  .s2{background:#1a1410;overflow:hidden}
+  .s2 .view{position:absolute;top:0;right:0;bottom:0;left:0;background:radial-gradient(50% 38% at 50% 44%,rgba(180,150,110,.55),rgba(40,28,20,.92) 80%),repeating-linear-gradient(43deg,rgba(217,84,43,.04) 0 2px,transparent 2px 14px),linear-gradient(180deg,#3a2a1d,#1a1410)}
+  .sil{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);width:96px;height:78px;border-radius:46% 46% 38% 38%/60% 60% 40% 40%;background:#241910}
+  .sil::before{content:"";position:absolute;top:-13px;left:50%;transform:translateX(-50%);width:40px;height:28px;background:#241910;border-radius:50% 50% 40% 40%}
+  .s2 .top{position:absolute;top:46px;left:0;right:0;padding:0 18px;display:flex;justify-content:space-between;color:#fff;z-index:6}
+  .s2 .close{width:28px;height:28px;border-radius:99px;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;font-size:14px}
+  .s2 .rec{padding:5px 10px;border-radius:99px;background:var(--primary);color:#fff;font-family:var(--mono);font-size:8px;letter-spacing:.14em;font-weight:700;text-transform:uppercase}
+  .s2 .bot{position:absolute;bottom:0;left:0;right:0;padding:22px 24px 30px;display:flex;flex-direction:column;align-items:center;gap:14px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.6))}
+  .s2 .hint{font-family:var(--mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.85);font-weight:600}
+  .shutter{width:72px;height:72px;border-radius:99px;background:#fff;border:5px solid rgba(255,255,255,.4);transition:transform .15s}
+  .shutter:active{transform:scale(.92)}
+
+  /* S3 triage */
+  .s3{background:var(--paper)}
+  .s3 .top{padding:48px 20px 12px;display:flex;justify-content:space-between}
+  .s3 .top span{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--mute)}
+  .s3 .top .skip{color:var(--primary);font-weight:700;text-transform:uppercase}
+  .thumb{margin:4px 20px 14px;border-radius:14px;height:120px;background:radial-gradient(50% 50% at 50% 50%,rgba(180,150,110,.7),rgba(40,28,20,.95) 80%);border:1px solid var(--hair);position:relative;overflow:hidden}
+  .thumb .s{position:absolute;left:50%;top:56%;transform:translate(-50%,-50%);width:56px;height:42px;background:#1a1410;border-radius:46% 46% 38% 38%/60% 60% 40% 40%}
+  .thumb .m{position:absolute;left:10px;bottom:10px;font-family:var(--mono);font-size:8px;color:#fff;letter-spacing:.14em;text-transform:uppercase;background:rgba(0,0,0,.5);padding:3px 7px;border-radius:4px}
+  .q{padding:0 20px 8px}
+  .q h5{font-family:var(--serif);font-weight:400;font-size:23px;line-height:1.1}
+  .q p{font-size:11px;color:var(--mute);margin-top:2px}
+  .tiles{padding:6px 16px;display:flex;flex-direction:column;gap:8px}
+  .tile{padding:13px;border-radius:12px;border:1px solid var(--hair);background:#fff;display:flex;align-items:center;gap:11px;transition:transform .12s,box-shadow .12s}
+  .tile:active{transform:scale(.98)}
+  .tile.crit{background:#FCEEEA;border-color:#E9C9C0}
+  .tile .dot{width:10px;height:10px;border-radius:99px;flex-shrink:0;background:var(--bad)}
+  .tile.vis .dot{background:var(--warn)} .tile.est .dot{background:var(--good)}
+  .tile .l{font-size:13px;font-weight:700;color:var(--ink)}
+  .tile .ss{font-size:10px;color:var(--mute);margin-top:1px}
+  .tile .ar{margin-left:auto;color:var(--mute)}
+  .auto{margin:13px 20px 18px;padding:9px 12px;background:var(--cream);border-radius:10px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--mute);letter-spacing:.08em}
+  .auto b{color:var(--ink)}
+
+  /* S4 confirm */
+  .s4{background:var(--paper)}
+  .s4 .top{padding:48px 20px 14px}
+  .s4 .tag{display:inline-block;font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--good);background:#EFF3EA;padding:4px 10px;border-radius:99px;border:1px solid #CFD9C2;font-weight:700;margin-bottom:12px}
+  .s4 h5{font-family:var(--serif);font-weight:400;font-size:27px;line-height:1.05}
+  .s4 .sub{font-size:12px;color:var(--ink2);margin-top:7px}
+  .case{margin:16px 20px;padding:14px;background:#fff;border-radius:14px;border:1px solid var(--hair)}
+  .case .id{font-family:var(--mono);font-size:9px;color:var(--mute);letter-spacing:.14em;text-transform:uppercase}
+  .case .id b{color:var(--ink);margin-left:6px}
+  .case .row{display:flex;justify-content:space-between;padding:8px 0;border-top:1px dashed var(--hair);font-size:12px;margin-top:9px}
+  .case .row:first-of-type{border-top:0;margin-top:0}
+  .case .row .k{color:var(--mute)} .case .row .v{color:var(--ink);font-weight:600}
+  .case .row .v.crit{color:var(--bad)} .case .row .v.vis{color:var(--warn)} .case .row .v.est{color:var(--good)}
+  .opt{margin:0 20px 14px;padding:13px;background:var(--cream);border-radius:12px;font-size:11px;color:var(--ink2);line-height:1.5}
+  .opt b{display:block;color:var(--ink);margin-bottom:3px}
+  .s4 .cta{margin:auto 20px 22px}
+
+  .replay{display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border:0;padding:11px 18px;border-radius:10px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer}
+  .foot{font-family:var(--mono);font-size:10px;color:var(--mute);letter-spacing:.06em;text-align:center}
+  .foot b{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div class="k">Prototipo navegable · mockup</div>
+  <h1>App SOS — un reporte en 30 segundos</h1>
+  <p>Toca la pantalla para recorrer el flujo ciudadano. Sin backend: demuestra el diseño y la restricción de 30 s.</p>
+</div>
+
+<div class="timer">
+  <div class="bar"><div class="fill" id="fill"></div></div>
+  <div class="lab"><span>0 s</span><span id="tlab">Toca «Reportar» para empezar</span><span>30 s</span></div>
+</div>
+
+<div class="phone">
+  <div class="notch"></div>
+  <div class="screenwrap" id="wrap">
+
+    <!-- S1 -->
+    <div class="scr s1 on" data-s="1">
+      <div class="status"><span>9:41</span><span>5G · 100</span></div>
+      <div class="lensarea"><div class="lens">SOS</div></div>
+      <div class="label"><div class="kk">Toca para reportar</div><div class="tt">¿Ves un animal<br>en peligro?</div></div>
+      <div class="cta tap" data-go="2">REPORTAR <small>Mantén para grabar video</small></div>
+      <div class="alt">· · · ver mis reportes</div>
+    </div>
+
+    <!-- S2 -->
+    <div class="scr s2" data-s="2">
+      <div class="view"></div><div class="sil"></div>
+      <div class="status" style="color:#fff"><span>9:41</span><span>5G · 100</span></div>
+      <div class="top"><div class="close tap" data-go="1">✕</div><div class="rec">● EN VIVO</div></div>
+      <div class="bot"><div class="hint">Encuadra al animal · toca para capturar</div><div class="shutter tap" data-go="3"></div></div>
+    </div>
+
+    <!-- S3 -->
+    <div class="scr s3" data-s="3">
+      <div class="top"><span>← Rehacer foto</span><span class="skip tap" data-go="4" data-urg="Visible" data-urgcls="vis">Saltar →</span></div>
+      <div class="thumb"><div class="s"></div><div class="m">Captura · 9:41</div></div>
+      <div class="q"><h5>¿Qué tan grave?</h5><p>Una sola pregunta. Un toque.</p></div>
+      <div class="tiles">
+        <div class="tile crit tap" data-go="4" data-urg="Crítica" data-urgcls="crit"><div class="dot"></div><div><div class="l">Crítica</div><div class="ss">Herido, sangrando, atropellado</div></div><div class="ar">›</div></div>
+        <div class="tile vis tap" data-go="4" data-urg="Visible" data-urgcls="vis"><div class="dot"></div><div><div class="l">Visible</div><div class="ss">Flaco, desorientado, expuesto</div></div><div class="ar">›</div></div>
+        <div class="tile est tap" data-go="4" data-urg="Estable" data-urgcls="est"><div class="dot"></div><div><div class="l">Estable</div><div class="ss">Abandonado, sin peligro inmediato</div></div><div class="ar">›</div></div>
+      </div>
+      <div class="auto"><span>UBICACIÓN <b>auto</b></span><span>ESPECIE <b>perro/gato</b></span></div>
+    </div>
+
+    <!-- S4 -->
+    <div class="scr s4" data-s="4">
+      <div class="top"><span class="tag">✓ Publicado</span><h5>Ya está público.</h5><div class="sub">Pronto una ONG tomará el caso. Te estaremos avisando.</div></div>
+      <div class="case">
+        <div class="id">CASO <b>#A-7421-CTG</b></div>
+        <div class="row"><span class="k">Ubicación</span><span class="v">Cl. 30 con Av. Pedro de Heredia</span></div>
+        <div class="row"><span class="k">Urgencia</span><span class="v crit" id="urgVal">● Crítica</span></div>
+        <div class="row"><span class="k">Especie</span><span class="v">Perro/Gato</span></div>
+        <div class="row"><span class="k">Estado</span><span class="v">Pendiente · 1 ONG cubre la zona</span></div>
+      </div>
+      <div class="opt"><b>¿Quieres seguir el caso?</b>Te avisamos cuando cambie de estado. Sin email, sin cuenta — solo este teléfono.</div>
+      <div class="cta tap" data-go="1">Seguir caso · o cerrar</div>
+    </div>
+
+  </div>
+</div>
+
+<button class="replay" id="replay">↺ Reiniciar el flujo</button>
+<div class="foot"><a href="directiva-diseno-app.html" style="color:var(--primary);text-decoration:none">← Ver la directiva</a> &nbsp;·&nbsp; Diseño <b>Directiva DD-2026-03</b> · <b>Marinovich Consulting</b> · prototipo, sin backend</div>
+
+<script>
+  (function(){
+    var times = {1:0, 2:10, 3:18, 4:30};
+    var scrs = Array.prototype.slice.call(document.querySelectorAll('.scr'));
+    var fill = document.getElementById('fill');
+    var tlab = document.getElementById('tlab');
+    function show(n){
+      scrs.forEach(function(s){ s.classList.toggle('on', s.getAttribute('data-s')===String(n)); });
+      var secs = times[n];
+      fill.style.width = Math.min(100, (secs/30)*100) + '%';
+      if(n===1){ tlab.textContent='Toca «Reportar» para empezar'; }
+      else if(n===4){ tlab.textContent='~'+secs+' s · publicado'; }
+      else { tlab.textContent='~'+secs+' s'; }
+    }
+    var urgEl = document.getElementById('urgVal');
+    function setUrg(label,cls){ if(urgEl){ urgEl.textContent='● '+label; urgEl.className='v '+cls; } }
+    document.getElementById('wrap').addEventListener('click', function(e){
+      var t = e.target.closest('[data-go]');
+      if(!t) return;
+      var urg = t.getAttribute('data-urg');
+      if(urg){ setUrg(urg, t.getAttribute('data-urgcls')); }
+      show(parseInt(t.getAttribute('data-go'),10));
+    });
+    document.getElementById('replay').addEventListener('click', function(){ show(1); });
+    show(1);
+  })();
+</script>
+</body>
+</html>

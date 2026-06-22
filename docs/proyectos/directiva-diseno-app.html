@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Directiva de Diseño — SOS Salvando Patitas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F2EDE0;
+    --cream-2:#E9E2D1;
+    --paper:#FBF8F1;
+    --ink:#1A1612;
+    --ink-2:#3A332A;
+    --mute:#857968;
+    --hair:#D8CFBC;
+    --primary:#D9542B;   /* Cartagena terracotta */
+    --primary-soft:#FBEADF;
+    --accent:#A8281B;    /* urgent red */
+    --good:#3F7A3F;
+    --warn:#B4751A;
+    --bad:#A8281B;
+    --shadow: 0 1px 0 rgba(26,22,18,0.04), 0 8px 24px -16px rgba(26,22,18,0.18);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--cream);color:var(--ink);font-family:'Geist',ui-sans-serif,system-ui,sans-serif;font-feature-settings:"ss01","cv11";-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{font-size:15px;line-height:1.55;font-weight:400}
+  .serif{font-family:'Instrument Serif',Georgia,serif;font-weight:400}
+  .mono{font-family:'Geist Mono',ui-monospace,monospace}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 40px}
+  .wrap-narrow{max-width:760px;margin:0 auto;padding:0 40px}
+
+  /* Page header */
+  header.top{padding:28px 0 0;border-bottom:1px solid var(--hair)}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:24px;padding-bottom:24px}
+  .crest{display:flex;align-items:center;gap:10px;font-weight:600;letter-spacing:.02em}
+  .crest .dot{width:10px;height:10px;border-radius:99px;background:var(--primary)}
+  .meta{display:flex;gap:28px;font-size:12px;color:var(--mute)}
+  .meta b{color:var(--ink);font-weight:600}
+
+  /* Hero */
+  section.hero{padding:72px 0 56px}
+  .eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--primary);font-weight:600;margin-bottom:24px}
+  h1.tesis{font-family:'Instrument Serif',serif;font-weight:400;font-size:78px;line-height:.98;letter-spacing:-.01em;margin:0 0 28px;color:var(--ink);max-width:14ch}
+  h1.tesis em{font-style:italic;color:var(--primary)}
+  .lede{font-size:19px;line-height:1.5;color:var(--ink-2);max-width:62ch}
+  .lede strong{font-weight:600;color:var(--ink)}
+
+  /* Constraint banner */
+  .constraint{margin:48px 0 0;padding:28px 32px;background:var(--ink);color:var(--cream);border-radius:14px;display:grid;grid-template-columns:auto 1fr auto;gap:32px;align-items:center}
+  .constraint .num{font-family:'Instrument Serif',serif;font-size:96px;line-height:.85;color:var(--cream);letter-spacing:-.03em}
+  .constraint .num .unit{font-family:'Geist Mono',monospace;font-size:18px;color:var(--mute);margin-left:6px;letter-spacing:0;vertical-align:top;line-height:1;display:inline-block;margin-top:8px}
+  .constraint .copy{max-width:60ch}
+  .constraint .copy .k{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#D9542B;font-weight:600;margin-bottom:8px}
+  .constraint .copy p{margin:0;color:#E9E2D1;font-size:15px;line-height:1.55}
+  .constraint .stamp{font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);writing-mode:vertical-rl;transform:rotate(180deg);border-left:1px solid #3A332A;padding-left:14px}
+
+  /* Section anchors */
+  section.block{padding:80px 0;border-top:1px solid var(--hair)}
+  .sec-head{display:grid;grid-template-columns:120px 1fr;gap:56px;margin-bottom:48px;align-items:baseline}
+  .sec-head .num{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);font-weight:600;line-height:1}
+  .sec-head .num b{display:block;font-family:'Instrument Serif',serif;font-weight:400;font-size:72px;line-height:.9;letter-spacing:-.03em;color:var(--ink);margin-top:14px;text-transform:none}
+  .sec-head h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:44px;line-height:1.05;letter-spacing:-.01em;margin:0;color:var(--ink);max-width:22ch}
+  .sec-head h2 + p{margin-top:14px;color:var(--ink-2);font-size:16px;line-height:1.55;max-width:62ch}
+
+  /* Diagnosis */
+  .diag{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .card{background:var(--paper);border:1px solid var(--hair);border-radius:14px;padding:28px;box-shadow:var(--shadow)}
+  .card.bad{background:#FCEEEA;border-color:#E9C9C0}
+  .card.good{background:#EFF3EA;border-color:#CFD9C2}
+  .card .tag{font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;margin-bottom:18px;display:inline-block;padding:4px 10px;border-radius:99px;background:var(--cream);border:1px solid var(--hair);color:var(--mute)}
+  .card.bad .tag{background:#fff;border-color:#E9C9C0;color:var(--bad)}
+  .card.good .tag{background:#fff;border-color:#CFD9C2;color:var(--good)}
+  .card h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:28px;line-height:1.1;margin:0 0 14px;letter-spacing:-.005em}
+  .card p{margin:0 0 14px;color:var(--ink-2);line-height:1.55}
+  .card ul{margin:0;padding:0;list-style:none}
+  .card ul li{padding:10px 0;border-top:1px dashed var(--hair);display:flex;justify-content:space-between;gap:16px;font-size:14px}
+  .card.bad ul li{border-color:#E9C9C0}
+  .card.good ul li{border-color:#CFD9C2}
+  .card ul li:first-child{border-top:0}
+  .card ul li .t{color:var(--ink-2)}
+  .card ul li .s{font-family:'Geist Mono',monospace;font-size:12px;color:var(--mute);white-space:nowrap}
+  .card.bad ul li .s{color:var(--bad);font-weight:500}
+  .card.good ul li .s{color:var(--good);font-weight:500}
+  .card .total{margin-top:18px;padding-top:14px;border-top:2px solid currentColor;display:flex;justify-content:space-between;align-items:baseline;font-weight:600}
+  .card .total .v{font-family:'Instrument Serif',serif;font-size:32px;line-height:1}
+
+  /* Timeline */
+  .timeline{position:relative;margin:24px 0 0}
+  .track{position:relative;height:3px;background:var(--hair);border-radius:99px;margin:48px 0 36px}
+  .track .fill{position:absolute;left:0;top:0;height:100%;background:var(--primary);border-radius:99px;width:100%}
+  .ticks{position:absolute;top:-22px;left:0;right:0;display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:11px;color:var(--mute);letter-spacing:.06em}
+  .ticks span:last-child{color:var(--primary);font-weight:600}
+  .beats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;align-items:start}
+  .beat{display:flex;flex-direction:column;gap:18px}
+  .beat .head{display:flex;justify-content:space-between;align-items:baseline}
+  .beat .head .t{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--primary);font-weight:600}
+  .beat .head .n{font-family:'Geist Mono',monospace;font-size:10px;color:var(--mute);letter-spacing:.16em}
+  .beat h4{font-family:'Instrument Serif',serif;font-weight:400;font-size:24px;line-height:1.1;margin:0;letter-spacing:-.005em}
+  .beat .desc{font-size:13px;line-height:1.55;color:var(--ink-2)}
+  .beat .desc b{color:var(--ink);font-weight:600}
+
+  /* Phone frames */
+  .phone{aspect-ratio:9/19;background:var(--ink);border-radius:28px;padding:6px;box-shadow:0 1px 0 rgba(0,0,0,0.06), 0 24px 50px -30px rgba(26,22,18,0.4), 0 8px 20px -16px rgba(26,22,18,0.2);position:relative}
+  .phone .screen{width:100%;height:100%;background:var(--paper);border-radius:22px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+  .phone .notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:60px;height:14px;background:#000;border-radius:99px;z-index:5}
+  .phone .status{padding:14px 18px 0;display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:9px;color:var(--ink);font-weight:500}
+  .phone .status .right{display:flex;gap:5px;align-items:center}
+  .phone .status .bars{display:inline-flex;gap:1.5px;align-items:end}
+  .phone .status .bars i{display:block;width:2px;background:var(--ink);border-radius:1px}
+  .phone .status .bars i:nth-child(1){height:3px}
+  .phone .status .bars i:nth-child(2){height:5px}
+  .phone .status .bars i:nth-child(3){height:7px}
+  .phone .status .bars i:nth-child(4){height:9px}
+
+  /* Screen 1 — Camera-ready home */
+  .s1{flex:1;background:#0c0a08;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;padding:0;position:relative;overflow:hidden}
+  .s1::before{content:"";position:absolute;inset:0;background:
+    radial-gradient(120% 60% at 50% 30%, rgba(217,84,43,0.18), transparent 60%),
+    linear-gradient(180deg, #1a1410 0%, #0c0a08 60%);
+  }
+  .s1 .lens{position:absolute;left:50%;top:36%;transform:translate(-50%,-50%);width:118px;height:118px;border-radius:99px;border:2px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Instrument Serif',serif;font-size:42px}
+  .s1 .lens::after{content:"";position:absolute;inset:-12px;border-radius:99px;border:1px dashed rgba(217,84,43,.45);animation:pulse 2.2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.06);opacity:1}}
+  .s1 .label{position:relative;text-align:center;padding:0 22px 22px;color:#E9E2D1}
+  .s1 .label .k{font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#D9542B;font-weight:600;margin-bottom:6px}
+  .s1 .label .t{font-family:'Instrument Serif',serif;font-size:22px;line-height:1.1}
+  .s1 .cta{position:relative;margin:0 18px 28px;background:var(--primary);color:#fff;padding:18px;text-align:center;border-radius:14px;font-weight:600;letter-spacing:.02em;font-size:15px;box-shadow:0 12px 24px -12px rgba(217,84,43,.7)}
+  .s1 .cta small{display:block;font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.18em;opacity:.8;margin-top:4px;font-weight:500;text-transform:uppercase}
+  .s1 .alt{position:relative;text-align:center;padding:0 0 14px;font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+
+  /* Screen 2 — Capture */
+  .s2{flex:1;background:#1a1410;position:relative;overflow:hidden}
+  .s2 .view{position:absolute;inset:0;background:
+    radial-gradient(50% 38% at 50% 42%, rgba(180,150,110,.55), rgba(40,28,20,.9) 80%),
+    repeating-linear-gradient(43deg, rgba(217,84,43,.04) 0 2px, transparent 2px 14px),
+    linear-gradient(180deg,#3a2a1d,#1a1410);
+  }
+  .s2 .silhouette{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:96px;height:78px;border-radius:46% 46% 38% 38% / 60% 60% 40% 40%;background:#2a1d13;box-shadow:inset 0 -6px 12px rgba(0,0,0,.4)}
+  .s2 .silhouette::before{content:"";position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:42px;height:30px;background:#2a1d13;border-radius:50% 50% 40% 40%}
+  .s2 .silhouette::after{content:"";position:absolute;top:-22px;left:30%;width:8px;height:14px;background:#2a1d13;border-radius:40% 40% 60% 60%;box-shadow:24px 0 0 #2a1d13}
+  .s2 .top{position:absolute;top:48px;left:0;right:0;padding:0 18px;display:flex;justify-content:space-between;color:#fff}
+  .s2 .top .close{width:28px;height:28px;border-radius:99px;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;font-size:14px;backdrop-filter:blur(8px)}
+  .s2 .top .rec{padding:5px 10px;border-radius:99px;background:var(--primary);color:#fff;font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.14em;font-weight:600;text-transform:uppercase}
+  .s2 .bot{position:absolute;bottom:0;left:0;right:0;padding:24px 24px 32px;display:flex;flex-direction:column;align-items:center;gap:14px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.6))}
+  .s2 .bot .hint{font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.8);font-weight:500}
+  .s2 .shutter{width:74px;height:74px;border-radius:99px;background:#fff;border:5px solid rgba(255,255,255,.4)}
+  .s2 .gloss{position:absolute;inset:0;background:radial-gradient(70% 30% at 50% 0%, rgba(255,255,255,.05), transparent 60%)}
+
+  /* Screen 3 — Triage */
+  .s3{flex:1;background:var(--paper);display:flex;flex-direction:column;padding:0}
+  .s3 .top{padding:50px 22px 14px;display:flex;justify-content:space-between;align-items:center}
+  .s3 .top .back{font-family:'Geist Mono',monospace;font-size:9px;color:var(--mute);letter-spacing:.14em}
+  .s3 .top .skip{font-family:'Geist Mono',monospace;font-size:9px;color:var(--primary);letter-spacing:.14em;font-weight:600;text-transform:uppercase}
+  .s3 .thumb{margin:6px 22px 18px;border-radius:14px;height:140px;background:
+    radial-gradient(50% 50% at 50% 50%, rgba(180,150,110,.7), rgba(40,28,20,.95) 80%),
+    linear-gradient(180deg,#5a4534,#1a1410);
+    border:1px solid var(--hair);position:relative;overflow:hidden}
+  .s3 .thumb .sil{position:absolute;left:50%;top:55%;transform:translate(-50%,-50%);width:60px;height:46px;background:#1a1410;border-radius:46% 46% 38% 38% / 60% 60% 40% 40%}
+  .s3 .thumb .meta{position:absolute;left:10px;bottom:10px;font-family:'Geist Mono',monospace;font-size:8px;color:#fff;letter-spacing:.14em;text-transform:uppercase;background:rgba(0,0,0,.5);padding:3px 7px;border-radius:4px}
+  .s3 .q{padding:0 22px 12px}
+  .s3 .q h5{margin:0 0 6px;font-family:'Instrument Serif',serif;font-weight:400;font-size:24px;line-height:1.1;color:var(--ink)}
+  .s3 .q p{margin:0;font-size:11px;color:var(--mute)}
+  .s3 .tiles{padding:8px 18px;display:flex;flex-direction:column;gap:8px}
+  .s3 .tile{padding:14px;border-radius:12px;border:1px solid var(--hair);background:#fff;display:flex;align-items:center;gap:12px}
+  .s3 .tile.crit{background:#FCEEEA;border-color:#E9C9C0}
+  .s3 .tile .dot{width:10px;height:10px;border-radius:99px;background:var(--bad);flex-shrink:0}
+  .s3 .tile.vis .dot{background:var(--warn)}
+  .s3 .tile.est .dot{background:var(--good)}
+  .s3 .tile .l{font-size:13px;font-weight:600;color:var(--ink)}
+  .s3 .tile .s{font-size:10px;color:var(--mute);margin-top:1px}
+  .s3 .tile .arrow{margin-left:auto;color:var(--mute)}
+  .s3 .auto{margin:14px 22px 22px;padding:10px 12px;background:var(--cream);border-radius:10px;display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:9px;color:var(--mute);letter-spacing:.08em}
+  .s3 .auto b{color:var(--ink);font-weight:600}
+
+  /* Screen 4 — Confirm */
+  .s4{flex:1;background:var(--paper);display:flex;flex-direction:column;padding:0}
+  .s4 .top{padding:50px 22px 18px}
+  .s4 .top .tag{display:inline-block;font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--good);background:#EFF3EA;padding:4px 10px;border-radius:99px;border:1px solid #CFD9C2;font-weight:600;margin-bottom:14px}
+  .s4 .top h5{margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:30px;line-height:1.05;color:var(--ink)}
+  .s4 .top p{margin:8px 0 0;font-size:12px;color:var(--ink-2)}
+  .s4 .case{margin:18px 22px;padding:14px;background:#fff;border-radius:14px;border:1px solid var(--hair)}
+  .s4 .case .id{font-family:'Geist Mono',monospace;font-size:10px;color:var(--mute);letter-spacing:.14em;text-transform:uppercase}
+  .s4 .case .id b{color:var(--ink);font-weight:600;margin-left:6px}
+  .s4 .case .row{display:flex;justify-content:space-between;padding:8px 0;border-top:1px dashed var(--hair);font-size:12px;margin-top:10px}
+  .s4 .case .row:first-of-type{border-top:0;margin-top:0}
+  .s4 .case .row .k{color:var(--mute)}
+  .s4 .case .row .v{color:var(--ink);font-weight:500}
+  .s4 .case .row .v.crit{color:var(--bad);font-weight:600}
+  .s4 .opt{margin:0 22px 16px;padding:14px;background:var(--cream);border-radius:12px;font-size:11px;color:var(--ink-2);line-height:1.5}
+  .s4 .opt b{display:block;font-weight:600;color:var(--ink);margin-bottom:3px;font-size:12px}
+  .s4 .cta{margin:auto 22px 26px 22px;padding:14px;background:var(--ink);color:#fff;text-align:center;border-radius:12px;font-weight:600;font-size:13px}
+
+  /* Tables (defaults, edge, decisions) */
+  table.dt{width:100%;border-collapse:collapse;background:var(--paper);border:1px solid var(--hair);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+  table.dt thead th{text-align:left;padding:14px 20px;font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);font-weight:600;background:var(--cream);border-bottom:1px solid var(--hair)}
+  table.dt tbody td{padding:18px 20px;border-bottom:1px solid var(--hair);vertical-align:top;font-size:14px;line-height:1.5;color:var(--ink-2)}
+  table.dt tbody tr:last-child td{border-bottom:0}
+  table.dt tbody td:first-child{color:var(--ink);font-weight:500;width:30%}
+  table.dt tbody td.mono{font-family:'Geist Mono',monospace;font-size:12px;color:var(--ink);font-weight:500;letter-spacing:.04em;width:18%}
+  table.dt tbody td .why{color:var(--mute);font-size:13px;margin-top:6px;display:block;line-height:1.5}
+
+  /* Decisions */
+  .dec-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .dec{background:var(--paper);border:1px solid var(--hair);border-radius:14px;padding:24px;box-shadow:var(--shadow);position:relative;display:flex;flex-direction:column;gap:14px}
+  .dec .verdict{position:absolute;top:20px;right:20px;font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:4px 10px;border-radius:99px;font-weight:600}
+  .dec .verdict.yes{background:#EFF3EA;color:var(--good);border:1px solid #CFD9C2}
+  .dec .verdict.no{background:#FCEEEA;color:var(--bad);border:1px solid #E9C9C0}
+  .dec .verdict.partial{background:#FAF1DD;color:var(--warn);border:1px solid #E9D6B0}
+  .dec .q{font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+  .dec h4{margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:24px;line-height:1.15;letter-spacing:-.005em;color:var(--ink);max-width:30ch}
+  .dec p{margin:0;color:var(--ink-2);font-size:14px;line-height:1.55}
+  .dec p + p{padding-top:10px;border-top:1px dashed var(--hair)}
+  .dec p b{color:var(--ink);font-weight:600}
+
+  /* Kill list */
+  .kill{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .kill .row{display:flex;gap:14px;align-items:flex-start;padding:18px 20px;background:var(--paper);border:1px solid var(--hair);border-radius:12px;position:relative;overflow:hidden}
+  .kill .row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--bad)}
+  .kill .row .x{font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--bad);font-weight:700;flex-shrink:0;padding-top:3px}
+  .kill .row .copy h5{margin:0 0 4px;font-size:14px;font-weight:600;color:var(--ink)}
+  .kill .row .copy p{margin:0;font-size:13px;color:var(--mute);line-height:1.5}
+
+  /* Footer / next */
+  footer{padding:80px 0 100px;border-top:1px solid var(--hair);background:var(--cream-2)}
+  .signoff{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:end}
+  .signoff h3{margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:40px;line-height:1.05;letter-spacing:-.01em;max-width:18ch}
+  .signoff .sig{font-family:'Geist Mono',monospace;font-size:11px;color:var(--mute);text-align:right;letter-spacing:.06em}
+  .signoff .sig .name{font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;color:var(--ink);font-weight:400;letter-spacing:-.005em;margin-bottom:6px}
+  .next{margin-top:48px;padding:24px 28px;background:var(--paper);border:1px solid var(--hair);border-radius:14px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:24px}
+  .next .label{font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--primary);font-weight:600}
+  .next .copy{font-size:14px;color:var(--ink-2)}
+  .next .copy b{color:var(--ink);font-weight:600}
+  .next .btn{background:var(--ink);color:#fff;padding:12px 20px;border-radius:10px;font-weight:600;font-size:13px;text-decoration:none;letter-spacing:.01em}
+
+  /* Inline marks */
+  mark.km{background:linear-gradient(180deg,transparent 60%, rgba(217,84,43,.25) 60%);padding:0 2px;color:var(--ink)}
+  mark.ku{background:none;color:var(--accent);font-weight:600}
+  hr.thin{border:0;border-top:1px solid var(--hair);margin:32px 0}
+  .small{font-size:12px;color:var(--mute);font-family:'Geist Mono',monospace;letter-spacing:.04em}
+
+  /* Print friendliness */
+  @media print{
+    .phone{box-shadow:none}
+    section.block{page-break-inside:avoid}
+    .constraint{break-inside:avoid}
+  }
+  /* Responsive collapse for the doc itself */
+  @media (max-width: 980px){
+    .sec-head{grid-template-columns:1fr;gap:8px}
+    .diag,.dec-grid,.kill,.beats{grid-template-columns:1fr 1fr}
+    .constraint{grid-template-columns:1fr;gap:14px}
+    .constraint .stamp{display:none}
+    h1.tesis{font-size:56px}
+  }
+  @media (max-width: 640px){
+    .wrap,.wrap-narrow{padding:0 22px}
+    .diag,.dec-grid,.kill,.beats{grid-template-columns:1fr}
+    h1.tesis{font-size:44px}
+    .sec-head h2{font-size:32px}
+  }
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<header class="top">
+  <div class="wrap">
+    <div class="topbar">
+      <div class="crest">
+        <span class="dot"></span>
+        <span class="mono" style="font-size:12px;letter-spacing:.14em;text-transform:uppercase">SOS Salvando Patitas · Directiva interna</span>
+      </div>
+      <div class="meta">
+        <div><b>Doc</b> &nbsp; DD-2026-03</div>
+        <div><b>Versión</b> &nbsp; v0.2 propuesta</div>
+        <div><b>Estado</b> &nbsp; <span style="color:var(--primary);font-weight:600">En revisión</span></div>
+        <div><b>Fecha</b> &nbsp; 21 may 2026</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Directiva de Diseño · Producto ciudadano</div>
+    <h1 class="tesis">Un reporte se hace <em>en treinta segundos</em>, o no se hace.</h1>
+    <p class="lede">
+      La calidad del dataset que entrena el triage automático de las ONGs depende, no de cuántos campos
+      llenemos, sino de <strong>cuántos reportes lleguen</strong>. Cada segundo de fricción por encima de los 30 es un reporte que
+      no se mandó, una foto que no entrenó al modelo, y un animal que la red no vio.
+      Esta directiva reorganiza el flujo entero del ciudadano para volverlo
+      consistente con esa restricción. <strong>No es un objetivo aspiracional. Es una propiedad arquitectónica.</strong>
+    </p>
+
+    <div class="constraint">
+      <div class="num">30<span class="unit">SEG · MÁX</span></div>
+      <div class="copy">
+        <div class="k">Restricción inviolable</div>
+        <p>Tiempo total desde que el dedo toca el ícono de la app hasta que el reporte
+          queda en cola (local u online). Toda decisión de UI se justifica contra esta línea.
+          Si un elemento no se justifica, <strong>se elimina</strong>. Sin excepción.</p>
+      </div>
+      <div class="stamp">Inviolable</div>
+    </div>
+  </div>
+</section>
+
+<!-- Diagnostico -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="num">Sección 01<b>I</b></div>
+      <div>
+        <h2>Lo que hay hoy no cumple. Por mucho.</h2>
+        <p>Medí el flujo de <span class="mono">ReportForm.tsx</span> contra la restricción.
+          El producto actual no es un MVP rápido — es un formulario forense con cámara. La diferencia
+          es estructural, no de pulido.</p>
+      </div>
+    </div>
+
+    <div class="diag">
+      <div class="card bad">
+        <span class="tag">Flujo actual · v0.1</span>
+        <h3>4 pasos · 5 campos · 4 archivos obligatorios</h3>
+        <p>Cada elemento tiene un costo de tiempo medido contra la mano-sucia-en-la-calle del ciudadano,
+          no contra un usuario sentado en escritorio.</p>
+        <ul>
+          <li><span class="t">Home con onboarding y "protocolo de actuación"</span><span class="s">+3s</span></li>
+          <li><span class="t">Video obligatorio · 5–10s de grabación</span><span class="s">+10s</span></li>
+          <li><span class="t">3 fotos guiadas · cara, cuerpo, entorno</span><span class="s">+15s</span></li>
+          <li><span class="t">Tipo de animal · chip selector (4 opciones)</span><span class="s">+3s</span></li>
+          <li><span class="t">Severidad · 4 niveles en grid</span><span class="s">+3s</span></li>
+          <li><span class="t">Mapa interactivo + edición de dirección</span><span class="s">+8s</span></li>
+          <li><span class="t">Descripción narrativa libre</span><span class="s">+10s</span></li>
+          <li><span class="t">Subida secuencial (4 archivos a Azure)</span><span class="s">+8s</span></li>
+        </ul>
+        <div class="total" style="color:var(--bad)"><span>Tiempo agregado · óptimo</span><span class="v">~60s</span></div>
+        <div class="total" style="color:var(--bad);margin-top:0;padding-top:6px;border-top:0;font-size:12px;font-weight:400"><span class="mono">Bajo sol, una mano, 3G</span><span class="mono">120–180s</span></div>
+      </div>
+
+      <div class="card good">
+        <span class="tag">Propuesta · v0.2</span>
+        <h3>3 pantallas · 1 campo obligatorio · 1 archivo</h3>
+        <p>Mismo output al backend (ubicación + imagen + urgencia + timestamp), una fracción del tiempo.
+          Todo lo demás se infiere, se posterga o se mata.</p>
+        <ul>
+          <li><span class="t">Home = cámara armada · sin onboarding</span><span class="s">2s</span></li>
+          <li><span class="t">Permiso cámara on-demand + 1 foto (tap único)</span><span class="s">5s</span></li>
+          <li><span class="t">3 tiles de urgencia · 1 tap, defaults visibles</span><span class="s">5s</span></li>
+          <li><span class="t">Confirmación + Enviar (ubicación auto)</span><span class="s">3s</span></li>
+          <li><span class="t">Upload optimista en background</span><span class="s">0s percibidos</span></li>
+        </ul>
+        <div class="total" style="color:var(--good)"><span>Tiempo agregado · happy path</span><span class="v">~15s</span></div>
+        <div class="total" style="color:var(--good);margin-top:0;padding-top:6px;border-top:0;font-size:12px;font-weight:400"><span class="mono">Margen sobre la restricción</span><span class="mono">50%</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Happy path -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="num">Sección 02<b>II</b></div>
+      <div>
+        <h2>El flujo, beat por beat, sobre la línea de 30 segundos.</h2>
+        <p>Cuatro pantallas. Tres tap. Cero campos de texto. Los wireframes que siguen son
+          implementables: arriba/centro/abajo, dónde está cada CTA, qué gesto se acepta, qué
+          se muestra y qué no. Sin ambigüedad para ingeniería.</p>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="track">
+        <div class="ticks">
+          <span>0s</span><span>5s</span><span>10s</span><span>15s</span><span>20s</span><span>25s</span><span>30s · LÍMITE</span>
+        </div>
+      </div>
+
+      <div class="beats">
+
+        <!-- BEAT 1 -->
+        <div class="beat">
+          <div class="head"><span class="t">0s → 2s</span><span class="n">P01 / HOME-ARMADA</span></div>
+          <div class="phone" aria-label="Pantalla 1, home armada con cámara lista">
+            <div class="screen">
+              <div class="notch"></div>
+              <div class="status"><span>9:41</span><span class="right"><span class="bars"><i></i><i></i><i></i><i></i></span><span>5G</span><span>100</span></span></div>
+              <div class="s1">
+                <div class="lens">SOS</div>
+                <div class="label">
+                  <div class="k">Toca para reportar</div>
+                  <div class="t">¿Ves un animal<br/>en peligro?</div>
+                </div>
+                <div class="cta">REPORTAR <small>Mantén para grabar video</small></div>
+                <div class="alt">· · · ver mis reportes</div>
+              </div>
+            </div>
+          </div>
+          <h4>Home = cámara armada.</h4>
+          <div class="desc">
+            <p style="margin:0 0 8px"><b>Arriba:</b> hora del sistema. Nada más. Sin nav, sin logo institucional, sin tagline.</p>
+            <p style="margin:0 0 8px"><b>Centro:</b> lente pulsante en marca + una sola pregunta humana. La pregunta hace el trabajo del onboarding sin onboarding.</p>
+            <p style="margin:0 0 8px"><b>Abajo:</b> CTA único, full-width, pulgar-derecho. <b>Tap = foto. Long-press = video.</b> Un solo gesto, dos modos. Subtítulo del botón enseña el long-press sin pantalla extra.</p>
+            <p style="margin:0"><b>Permisos:</b> ninguno se pide aquí. Se piden al activar la cámara, sólo si hace falta.</p>
+          </div>
+        </div>
+
+        <!-- BEAT 2 -->
+        <div class="beat">
+          <div class="head"><span class="t">2s → 7s</span><span class="n">P02 / CÁMARA-LIVE</span></div>
+          <div class="phone" aria-label="Pantalla 2, cámara en vivo con shutter">
+            <div class="screen">
+              <div class="notch"></div>
+              <div class="status" style="color:#fff"><span>9:41</span><span class="right" style="color:#fff"><span class="bars" style="color:#fff"><i style="background:#fff"></i><i style="background:#fff"></i><i style="background:#fff"></i><i style="background:#fff"></i></span><span>5G</span><span>100</span></span></div>
+              <div class="s2">
+                <div class="view"></div>
+                <div class="silhouette"></div>
+                <div class="top">
+                  <div class="close">✕</div>
+                  <div class="rec">● EN VIVO</div>
+                </div>
+                <div class="bot">
+                  <div class="hint">Encuadra al animal · tap o mantén presionado</div>
+                  <div class="shutter"></div>
+                </div>
+                <div class="gloss"></div>
+              </div>
+            </div>
+          </div>
+          <h4>Captura sin guía rígida.</h4>
+          <div class="desc">
+            <p style="margin:0 0 8px"><b>Centro:</b> stream de cámara trasera, sin overlays de "encuadre la cara/cuerpo/entorno". Esos overlays se eliminan — el ciudadano captura lo que <b>puede</b>, no lo que un protocolo le pide.</p>
+            <p style="margin:0 0 8px"><b>Abajo:</b> shutter gigante. <b>Tap = foto.</b> <b>Mantener presionado = video</b> hasta soltar (cap 15s). Una sola acción cubre las dos rutas que antes eran dos pasos.</p>
+            <p style="margin:0 0 8px"><b>Arriba:</b> cerrar (vuelve a Home) y un tag pequeño que confirma que la cámara está viva. Sin contador de capturas, sin galería.</p>
+            <p style="margin:0"><b>Decisión clave:</b> la heterogeneidad de capturas reales <b>entrena mejor</b> al modelo de visión que 3 tomas forzadas mal ejecutadas en 5s.</p>
+          </div>
+        </div>
+
+        <!-- BEAT 3 -->
+        <div class="beat">
+          <div class="head"><span class="t">7s → 12s</span><span class="n">P03 / TRIAGE</span></div>
+          <div class="phone" aria-label="Pantalla 3, selección de urgencia">
+            <div class="screen">
+              <div class="notch"></div>
+              <div class="status"><span>9:41</span><span class="right"><span class="bars"><i></i><i></i><i></i><i></i></span><span>5G</span><span>100</span></span></div>
+              <div class="s3">
+                <div class="top"><div class="back">← Rehacer foto</div><div class="skip">Saltar →</div></div>
+                <div class="thumb"><div class="sil"></div><div class="meta">CAPTURA · 9:41</div></div>
+                <div class="q"><h5>¿Qué tan grave?</h5><p>Una sola pregunta. Un toque.</p></div>
+                <div class="tiles">
+                  <div class="tile crit"><div class="dot"></div><div><div class="l">Crítica</div><div class="s">Herido, sangrando, atropellado</div></div><div class="arrow">›</div></div>
+                  <div class="tile vis"><div class="dot"></div><div><div class="l">Visible</div><div class="s">Flaco, desorientado, expuesto</div></div><div class="arrow">›</div></div>
+                  <div class="tile est"><div class="dot"></div><div><div class="l">Estable</div><div class="s">Abandonado pero sin peligro inmediato</div></div><div class="arrow">›</div></div>
+                </div>
+                <div class="auto"><span>UBICACIÓN <b>auto</b></span><span>ESPECIE <b>perro/gato</b></span></div>
+              </div>
+            </div>
+          </div>
+          <h4>Una pregunta. Tres tiles. Listo.</h4>
+          <div class="desc">
+            <p style="margin:0 0 8px"><b>Arriba:</b> miniatura de la captura + opción "rehacer" (no obliga, sólo permite). "Saltar" envía como <b>severidad media + sin imagen</b> si las cosas se complicaron.</p>
+            <p style="margin:0 0 8px"><b>Centro:</b> 4 niveles colapsados a <b>3 tiles</b> (Crítica / Visible / Estable). El modelo de visión hará el fine-tuning después; aquí pedimos sólo lo que el humano percibe con certeza en la calle.</p>
+            <p style="margin:0 0 8px"><b>Abajo:</b> banda de defaults inferidos. Ubicación detectada en background mientras el usuario captura. Especie default "perro/gato" (90% del volumen real).</p>
+            <p style="margin:0"><b>Tap en cualquier tile = envío inmediato.</b> No hay botón "siguiente". El tap es la confirmación.</p>
+          </div>
+        </div>
+
+        <!-- BEAT 4 -->
+        <div class="beat">
+          <div class="head"><span class="t">12s → 30s</span><span class="n">P04 / CONFIRMA + AJUSTA</span></div>
+          <div class="phone" aria-label="Pantalla 4, confirmación con tarjeta del caso">
+            <div class="screen">
+              <div class="notch"></div>
+              <div class="status"><span>9:41</span><span class="right"><span class="bars"><i></i><i></i><i></i><i></i></span><span>5G</span><span>100</span></span></div>
+              <div class="s4">
+                <div class="top">
+                  <span class="tag">✓ Enviado</span>
+                  <h5>Listo. La red lo está viendo.</h5>
+                  <p>FELINOS Cartagena recibió el caso. Te avisamos cuando alguien lo tome.</p>
+                </div>
+                <div class="case">
+                  <div class="id">CASO <b>#A-7421-CTG</b></div>
+                  <div class="row"><span class="k">Ubicación</span><span class="v">Cl. 30 con Av. Pedro de Heredia</span></div>
+                  <div class="row"><span class="k">Urgencia</span><span class="v crit">● Crítica</span></div>
+                  <div class="row"><span class="k">Especie</span><span class="v">Perro/Gato</span></div>
+                  <div class="row"><span class="k">Estado</span><span class="v">Pendiente · 1 ONG cubre la zona</span></div>
+                </div>
+                <div class="opt">
+                  <b>¿Quieres seguir el caso?</b>
+                  Te mandamos una alerta cuando cambie de estado. Sin email, sin cuenta — sólo este teléfono.
+                </div>
+                <div class="cta">Seguir caso  ·  o cerrar</div>
+              </div>
+            </div>
+          </div>
+          <h4>Optimismo + trazabilidad.</h4>
+          <div class="desc">
+            <p style="margin:0 0 8px"><b>Arriba:</b> "Enviado" se muestra antes de que el upload termine. La cola corre en background; si falla, la app reintenta sin molestar.</p>
+            <p style="margin:0 0 8px"><b>Centro:</b> tarjeta con ID del caso, dirección reverse-geocoded, severidad, qué ONG cubre la zona. Esto es el principio de <b>confianza por transparencia</b> — el ciudadano ve dónde va el reporte.</p>
+            <p style="margin:0 0 8px"><b>Abajo:</b> opt-in de seguimiento (push). No bloquea. <b>5 minutos de ventana de edición</b> sobre severidad y especie en esta misma tarjeta — después se cierra.</p>
+            <p style="margin:0"><b>Sin pantalla de éxito narrativa.</b> El éxito es funcional, no ceremonial.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Defaults -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="num">Sección 03<b>III</b></div>
+      <div>
+        <h2>Qué asume la app sin preguntar — y la justificación de cada apuesta.</h2>
+        <p>El principio: pedimos intervención <strong>sólo para lo que no se puede inferir</strong>. Todo lo demás se
+          asume con honestidad y se muestra para que el ciudadano pueda corregirlo en post-envío si quiere.</p>
+      </div>
+    </div>
+
+    <table class="dt">
+      <thead><tr><th>Campo</th><th style="width:18%">Default</th><th>Por qué</th></tr></thead>
+      <tbody>
+        <tr><td>Ubicación</td><td class="mono">GPS actual</td><td>Se solicita al tap del shutter, no antes. Si el reverse-geocode falla, mostramos coordenadas crudas — son suficientes para que la ONG llegue. <span class="why">Mover-marcador-en-mapa está fuera del happy path. Es edit-post-envío.</span></td></tr>
+        <tr><td>Especie</td><td class="mono">"Perro/Gato"</td><td>~90% del volumen real en Cartagena/Barranquilla según data municipal. El triage visual (v0.3) ajustará. <span class="why">Selector de especie en el flujo cuesta 3-4s y nunca cambia el routing operativo en v0.2.</span></td></tr>
+        <tr><td>Severidad</td><td class="mono">Sin default · obligatorio</td><td>Único campo que requiere intervención humana porque el modelo aún no la puede inferir con confianza desde la imagen. <span class="why">3 niveles (no 4): la diferencia entre "baja" y "media" es ruido — ningún despachador la usa.</span></td></tr>
+        <tr><td>Identidad del reportante</td><td class="mono">Anónima</td><td>Compliance Ley 1581 sin fricción: no captura PII en happy path. <span class="why">Si el ciudadano quiere seguimiento, opta por push vinculado al device, no a email.</span></td></tr>
+        <tr><td>Descripción narrativa</td><td class="mono">Vacía</td><td>El texto libre es ruidoso para el dataset y lento de tipear con una mano. <span class="why">Si la ONG necesita más contexto, hay un chat asíncrono post-asignación.</span></td></tr>
+        <tr><td>Tipo de captura</td><td class="mono">Foto</td><td>Foto = 1s, video = 5-15s. Default optimiza el tiempo total. Long-press del shutter habilita video sin pantalla extra. <span class="why">Las ONGs reportan que la foto sola resuelve triage en >85% de casos.</span></td></tr>
+        <tr><td>ONG asignada</td><td class="mono">Auto · por geo + cobertura</td><td>El sistema asigna a la ONG con menor distancia + capacidad disponible. Se muestra en la confirmación. <span class="why">El ciudadano no elige ONG — ese es trabajo del despachador, no del que va caminando.</span></td></tr>
+        <tr><td>Reintento de upload</td><td class="mono">Hasta 24h</td><td>El reporte queda en IndexedDB y reintenta cada cambio de red. Si tras 24h sigue fallando, alerta visible en home. <span class="why">Offline-first no es un nice-to-have — es la diferencia entre captura en barrios y captura sólo en el centro.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Edge states -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="num">Sección 04<b>IV</b></div>
+      <div>
+        <h2>Qué pasa cuando el mundo no coopera.</h2>
+        <p>Cada estado tiene una regla: <strong>nunca bloquear el reporte si hay foto + GPS aproximado</strong>.
+          Lo demás es ruido recuperable.</p>
+      </div>
+    </div>
+
+    <table class="dt">
+      <thead><tr><th>Condición</th><th style="width:22%">Comportamiento</th><th>Implicación de UX</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Sin conexión a internet</td>
+          <td class="mono">Queue local</td>
+          <td>El reporte se guarda en IndexedDB y se intenta enviar en cada reconexión. <span class="why">UI: la confirmación dice "Guardado · se enviará cuando vuelva la señal", con un timestamp visible. Mismo flujo, mismo tiempo. El ciudadano nunca espera por la red.</span></td>
+        </tr>
+        <tr>
+          <td>GPS desactivado</td>
+          <td class="mono">Captura sigue</td>
+          <td>Si el OS niega geo, mostramos un mini-mapa de "selecciona dónde lo viste" tras la captura — penaliza al usuario en ~10s, inevitable. <span class="why">Pero nunca lo penalizamos antes: la cámara abre primero, la negociación de ubicación es después, cuando ya hay evidencia.</span></td>
+        </tr>
+        <tr>
+          <td>Cámara denegada</td>
+          <td class="mono">Galería · fallback</td>
+          <td>Botón secundario "Subir desde galería" aparece sólo si el permiso de cámara fue negado. <span class="why">Nunca lo mostramos por defecto — es un atajo a fraude/spam y diluye el dataset. Aparece sólo en el degrade.</span></td>
+        </tr>
+        <tr>
+          <td>Reporte duplicado &lt;50m, &lt;30min</td>
+          <td class="mono">Banner suave</td>
+          <td>"Otro caso reportado aquí hace 4 min. ¿Es el mismo?" con dos botones: <b>Sí, mismo caso</b> (vincula a reporte existente, no crea duplicado) o <b>No, otro animal</b> (envía normal). <span class="why">No bloqueamos. El ciudadano sabe mejor que el algoritmo. La elección genera dato de entrenamiento.</span></td>
+        </tr>
+        <tr>
+          <td>Batería &lt;10%</td>
+          <td class="mono">Modo ligero</td>
+          <td>Cámara baja a 720p, sin video disponible, sin animaciones. Banner pequeño explica. <span class="why">El ciudadano que reporta con batería baja es el más comprometido — no le pedimos que cargue el teléfono.</span></td>
+        </tr>
+        <tr>
+          <td>Foto muy borrosa o sin animal detectable (CV on-device, v0.3)</td>
+          <td class="mono">Aviso · no bloqueo</td>
+          <td>"No vimos un animal claro en la foto. ¿Reenviar?" con default = enviar igual. <span class="why">Falsos negativos del CV no pueden bloquear reportes reales. El humano gana siempre.</span></td>
+        </tr>
+        <tr>
+          <td>Red operativa lenta (3G, &gt;5s upload)</td>
+          <td class="mono">Optimismo</td>
+          <td>El "Enviado" se muestra al momento de la cola; el upload corre en background sin overlay modal. <span class="why">El ciudadano sigue con su vida. Si falla definitivamente, hay alerta en home — no un modal de bloqueo.</span></td>
+        </tr>
+        <tr>
+          <td>Sol directo en pantalla</td>
+          <td class="mono">Alto contraste · auto</td>
+          <td>CTA primario es marca-sobre-oscuro (no marca-sobre-cream). Tipografía mínima 16px. Hit targets ≥56px. <span class="why">Accesibilidad real = funciona en la calle, no en el comp del diseñador.</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Decisiones controversiales -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="num">Sección 05<b>V</b></div>
+      <div>
+        <h2>Las llamadas difíciles, justificadas contra los 30s.</h2>
+        <p>Aquí no hay opciones a considerar — hay decisiones tomadas. Si después
+          vienen con data que las contradiga, las revertimos. Sin data, esto es lo que se construye.</p>
+      </div>
+    </div>
+
+    <div class="dec-grid">
+      <div class="dec">
+        <span class="verdict no">No</span>
+        <span class="q">Email del reportante</span>
+        <h4>No se pide en el happy path.</h4>
+        <p>Tipear un email con una mano, con sol, son 8-15s. Y la mayoría no lo va a tipear bien.
+          Bloqueamos para nada.</p>
+        <p><b>Trade-off aceptado:</b> perdemos canal de comunicación 1-a-1 con el reportero.
+          Lo compensamos con push opcional vinculado al device (sin cuenta) en la pantalla de confirmación.
+          Si quiere notificarse del caso, un tap basta.</p>
+      </div>
+
+      <div class="dec">
+        <span class="verdict no">No</span>
+        <span class="q">Botón "Reporte anónimo" visible</span>
+        <h4>Anónimo es el default invisible.</h4>
+        <p>Decirlo explícitamente añade carga cognitiva y genera la pregunta opuesta
+          ("¿y si no soy anónimo qué pasa?"). El ciudadano no debería pensar en eso para reportar
+          un perro herido.</p>
+        <p><b>Política mostrada</b> en un footer enrollable al final de la confirmación, no como
+          decisión bloqueante. La Ley 1581 se cumple con no-captura — no con consentimiento explícito previo
+          a la captura, porque no hay nada que consentir.</p>
+      </div>
+
+      <div class="dec">
+        <span class="verdict partial">Sí, con límite</span>
+        <span class="q">Edición post-envío</span>
+        <h4>Ventana de 5 minutos sobre severidad y especie.</h4>
+        <p>Tiempo de edición = tiempo antes de que el dispatcher asigne el caso a una ONG.
+          Pasado ese punto, editar puede generar trabajo perdido para el rescatista.</p>
+        <p><b>Lo que nunca se puede editar:</b> ubicación, foto, timestamp.
+          Esos son el dato. <b>Lo que nunca se puede hacer:</b> borrar un reporte.
+          La integridad del dataset no es negociable — los falsos positivos los marca la ONG, no el reportante.</p>
+      </div>
+
+      <div class="dec">
+        <span class="verdict no">No</span>
+        <span class="q">Video obligatorio</span>
+        <h4>Foto = default. Video = opcional, long-press.</h4>
+        <p>El video obligatorio del v0.1 mata los 30s solo. 5-10 segundos de grabación + procesamiento + decisión
+          de re-grabar son 15-20s del presupuesto total. <b>No-negociable.</b></p>
+        <p><b>Por qué video sigue existiendo:</b> contexto temporal (cojera, respiración) entrena mejor
+          el modelo de comportamiento. Lo dejamos accesible, no obligatorio.
+          Long-press del shutter = video hasta soltar, cap 15s.</p>
+      </div>
+
+      <div class="dec">
+        <span class="verdict no">No</span>
+        <span class="q">3 fotos guiadas (cara/cuerpo/entorno)</span>
+        <h4>Una foto. La que el ciudadano pueda tomar.</h4>
+        <p>El protocolo de 3 ángulos asume condiciones de estudio. En la calle, son 3 oportunidades de
+          que el animal se mueva, el reportero se canse, o se cierre la app.
+          La heterogeneidad de capturas reales <b>entrena mejor</b> al modelo de visión.</p>
+        <p><b>Trade-off aceptado:</b> menor consistencia por reporte, compensada por más reportes totales.
+          El dataset gana en volumen lo que pierde en uniformidad. Volumen &gt; uniformidad para entrenar CV en condiciones reales.</p>
+      </div>
+
+      <div class="dec">
+        <span class="verdict no">No</span>
+        <span class="q">Mapa interactivo en el flujo</span>
+        <h4>Reverse-geocode + pin no editable hasta post-envío.</h4>
+        <p>Mapa arrastrable cuesta 8-12s. La precisión del GPS en exteriores en Cartagena/Barranquilla
+          es ~5-15m — más que suficiente para que un rescatista llegue.</p>
+        <p><b>Si el GPS está mal,</b> hay edición de pin en la ventana de 5 minutos post-envío.
+          Y si el reverse-geocode no encuentra dirección, mostramos coordenadas crudas —
+          las ONGs saben leerlas.</p>
+      </div>
+
+      <div class="dec">
+        <span class="verdict no">No</span>
+        <span class="q">Login / cuenta de usuario ciudadano</span>
+        <h4>Anónimo por sesión. Cuenta sólo para ONGs y admins.</h4>
+        <p>El reporte ciudadano se identifica con un <code class="mono" style="font-size:12px;background:var(--cream);padding:1px 6px;border-radius:4px">anonymous_session_id</code> persistido en localStorage del device.
+          Permite ver "mis reportes" en el mismo teléfono sin pedir credenciales.</p>
+        <p><b>Login existe</b> sólo en <code class="mono" style="font-size:12px;background:var(--cream);padding:1px 6px;border-radius:4px">/login</code> para perfiles <code class="mono" style="font-size:12px;background:var(--cream);padding:1px 6px;border-radius:4px">ngo_admin</code> y <code class="mono" style="font-size:12px;background:var(--cream);padding:1px 6px;border-radius:4px">rescuer</code>. La entrada al admin queda enterrada (link discreto en home, no en footer público).</p>
+      </div>
+
+      <div class="dec">
+        <span class="verdict yes">Sí</span>
+        <span class="q">Trazabilidad pública del reporte</span>
+        <h4>El ciudadano ve qué ONG recibe y cuándo cambia el estado.</h4>
+        <p>Confianza por transparencia es uno de los principios del producto. Sin un canal claro de
+          "qué pasó con mi reporte", el ciudadano deja de reportar después de la primera vez.</p>
+        <p><b>Implementación:</b> URL única por caso (<code class="mono" style="font-size:11px;background:var(--cream);padding:1px 6px;border-radius:4px">/c/A-7421-CTG</code>), pública y sin auth, que muestra timeline de estado y ONG asignada. Sin PII del reportante.
+          Compartible por WhatsApp.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Kill list -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="num">Sección 06<b>VI</b></div>
+      <div>
+        <h2>La lista de muertes. Si reaparece, regresamos a este documento.</h2>
+        <p>Funciones que parecen útiles, que un PM va a sugerir, y que violan
+          la restricción de 30s. Quedan registradas aquí con su razón de eliminación.</p>
+      </div>
+    </div>
+
+    <div class="kill">
+      <div class="row"><span class="x">KILL</span><div class="copy"><h5>Pantalla Home con "Protocolo de actuación" 01/02/03</h5><p>El home es la cámara armada. No enseñamos el flujo — se usa una vez y se aprende.</p></div></div>
+      <div class="row"><span class="x">KILL</span><div class="copy"><h5>Tono institucional: "Registro Facial", "Documentación visual", "Terminal v2.4"</h5><p>Suena a denuncia policial. Tono humano y caribeño: "Foto del animal", "¿Qué tan grave?". El ciudadano no es operador de sistema.</p></div></div>
+      <div class="row"><span class="x">KILL</span><div class="copy"><h5>Onboarding tutorial / primera ejecución</h5><p>La primera vez se usa, no se enseña. Un ciudadano con un perro herido enfrente no va a leer pantallas.</p></div></div>
+      <div class="row"><span class="x">KILL</span><div class="copy"><h5>Modal de permisos pre-emptivos en boot</h5><p>Cámara y GPS se piden <b>al momento de uso</b>, no antes. Negativos sostenidos por mala UX de permisos = -40% de reportes.</p></div></div>
+      <div class="row"><span class="x">KILL</span><div class="copy"><h5>Descripción narrativa libre</h5><p>Ruidoso para el dataset, lento de tipear, propenso a errores. Si hace falta contexto, chat post-asignación con la ONG.</p></div></div>
+      <div class="row"><span class="x">KILL</span><div class="copy"><h5>Selector detallado de raza/edad/color/sexo</h5><p>Trabajo del modelo de visión y de la ONG en terreno. El ciudadano no es veterinario.</p></div></div>
+      <div class="row"><span class="x">KILL</span><div class="copy"><h5>Captcha o "confirme que no es bot"</h5><p>Rate-limit por device hash hace el trabajo. Captcha rompe el flujo y excluye a usuarios con baja literacy digital.</p></div></div>
+      <div class="row"><span class="x">KILL</span><div class="copy"><h5>Pantalla de "Cargando reporte..." con copy narrativa</h5><p>Confirmación optimista. Si el upload falla, alerta sutil en home — nunca un modal bloqueante con copy del tipo "Sincronizando con la red operativa".</p></div></div>
+      <div class="row"><span class="x">KILL</span><div class="copy"><h5>Compartir en redes sociales desde la confirmación</h5><p>No es el momento. Si la ONG quiere comunicación pública, lo hace desde su propia operación, no como obligación del reportero.</p></div></div>
+      <div class="row"><span class="x">KILL</span><div class="copy"><h5>Estrellitas, gamificación, badge "Héroe rescatista"</h5><p>Trivializa una situación de sufrimiento animal y atrae reportes inflados. La motivación tiene que ser el animal, no un sticker.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Próximos pasos / signoff -->
+<footer>
+  <div class="wrap">
+    <div class="signoff">
+      <h3>Listo para construir el prototipo de v0.2.</h3>
+      <div class="sig">
+        <div class="name">— Dirección de Diseño</div>
+        DD-2026-03 · 21 may 2026<br/>
+        sos-salvando-patitas@licencias-marinovich
+      </div>
+    </div>
+
+    <div class="next">
+      <div class="label">Siguiente paso</div>
+      <div class="copy">
+        <b>Prototipo navegable mobile-first</b> de las 4 pantallas, con los tres edge states más críticos (offline, GPS off, duplicado).
+        Stack ya elegido (React + Vite + Supabase). Estimado: 1 sprint para validación con 5 usuarios en Cartagena.
+      </div>
+      <a class="btn" href="prototipo-app.html">▶ Ver el prototipo navegable →</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

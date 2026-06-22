@@ -19,6 +19,28 @@ Hoy un animal en condición crítica en la calle **no tiene a dónde reportarse 
 
 Es el inicio del flujo: aquí **nace el dato** que después recorre todo el sistema.
 
+> 🔗 **El eslabón para escalar.** El backend de la operación (Salesforce + DW) ya corre en producción; esta App es la **puerta de entrada que falta** para escalar — la **materia prima** de cada rescate y la fuente del **dataset agregado** (post-desenlace). Hoy está en **fase de diseño / mockup** (aún no montada).
+
+## 🎨 Diseño — mockups + directiva
+
+El flujo ciudadano se diseñó bajo una **restricción dura: un reporte se hace en 30 segundos, o no se hace.** De ahí se deriva cada decisión de UI — y una hipótesis falsable: *menos fricción, más reportes, mejor dataset para el modelo de visión*.
+
+📄 **[Ver la Directiva de Diseño (DD-2026-03) →](https://vladislavmarinovich.github.io/portafolio/proyectos/directiva-diseno-app.html)** — el flujo de 4 pantallas beat-por-beat, los defaults justificados, los *edge states* y la *kill list*.
+
+▶️ **[Ver demo navegable del flujo de 30 s →](https://vladislavmarinovich.github.io/portafolio/proyectos/prototipo-app.html)** — prototipo clickeable (sin backend), con tu paleta de la Directiva.
+
+**Flujo ciudadano de reporte** *(mockup)* — el triage de gravedad en origen:
+
+![App — flujo de reporte ciudadano](img/app-01-reporte.png)
+
+**Consola de Priorización — el despacho** *(mockup)* — mapa + lista + asignación:
+
+![Consola de Priorización — mapa, lista y acciones](img/app-03-lista-de-casos.png)
+
+**Modelo de datos (Supabase)** — el par evidencia→severidad + la cadena de custodia:
+
+![Esquema de datos — reports / evidences / status_history / profiles](img/app-04-schema.png)
+
 ## 🔵 Nivel 2 · Arquitectura — cómo funciona
 
 *(Todo lo de este nivel es público: diagramas, diccionario de datos, dominio y máquinas de estado. El código vivo es el Nivel 3.)*
