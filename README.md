@@ -69,13 +69,11 @@ flowchart LR
 
 ## 📸 El sistema, funcionando
 
-**Consola SOS — el cerebro operativo, corriendo en producción** *(capturas reales; nombres de donantes y proveedores difuminados por Habeas Data):*
+**Consola SOS — el cerebro operativo, corriendo en producción** *(captura real; datos sensibles difuminados):*
 
-![Consola — Resumen del caso](docs/proyectos/img/consola-01-ficha.png)
+![Consola — seguimiento clínico del caso](docs/proyectos/img/consola-03-veterinaria.png)
 
-![Consola — Finanzas por caso](docs/proyectos/img/consola-02-finanzas.png)
-
-→ Veterinaria, acción y selector de caso hijo en la **[ficha de la Consola](docs/proyectos/consola-sos.md)**.
+→ más vistas del sistema en la **[ficha de la Consola](docs/proyectos/consola-sos.md)**.
 
 **App de reportes ciudadanos — en diseño, con prototipo navegable:**
 
