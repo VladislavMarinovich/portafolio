@@ -22,6 +22,8 @@ El **cerebro operativo** de la Fundación. Gestiona el ciclo de vida completo de
 
 ![Consola — Veterinaria](img/consola-03-veterinaria.png)
 
+> *Transparencia: la **fecha de ingreso** y el indicador **hospitalizado** aparecen vacíos/incorrectos porque su autocompletado al abrir el caso clínico es una **regla de integridad en implementación** — parte del trabajo de automatizar que ciertos valores sean siempre correctos en vez de digitarse a mano.*
+
 **Acción operativa** — registrar una donación (campos de contacto y método de pago difuminados):
 
 ![Consola — Registrar donación](img/consola-04-accion.png)

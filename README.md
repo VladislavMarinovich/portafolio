@@ -73,6 +73,8 @@ flowchart LR
 
 ![Consola — seguimiento clínico del caso](docs/proyectos/img/consola-03-veterinaria.png)
 
+> *Nota de transparencia: la **fecha de ingreso** y el indicador **hospitalizado** aún no se autocompletan al abrir el caso clínico — esa regla de integridad está en implementación. Es parte de un trabajo deliberado de **automatizar la consistencia del dato**: que ciertos valores se calculen, no se digiten a mano.*
+
 → más vistas del sistema en la **[ficha de la Consola](docs/proyectos/consola-sos.md)**.
 
 **App de reportes ciudadanos — en diseño, con prototipo navegable:**
