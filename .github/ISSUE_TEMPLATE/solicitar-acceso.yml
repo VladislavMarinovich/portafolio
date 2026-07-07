@@ -1,5 +1,5 @@
 name: 🔑 Solicitar acceso a los repos
-description: Pide acceso de lectura al código privado (Consola, Data Warehouse, Infraestructura).
+description: Pide acceso de lectura al código privado (Consola, Data Warehouse).
 title: "[Acceso] Solicitud de "
 body:
   - type: markdown
@@ -10,7 +10,7 @@ body:
     id: nombre
     attributes:
       label: Nombre completo
-      placeholder: Ej. Olga Mariño
+      placeholder: Ej. Nombre Apellido
     validations:
       required: true
   - type: input
@@ -35,7 +35,6 @@ body:
       options:
         - label: Consola Operativa SOS (Salesforce · Apex · LWC)
         - label: Data Warehouse (Azure · Synapse · dbt)
-        - label: Infraestructura (Terraform · Azure)
         - label: Todos
   - type: textarea
     id: motivo
