@@ -232,4 +232,120 @@ flowchart LR
 
 ---
 
+## B1 · BPMN del proceso de rescate
+
+Flujo operativo de un rescate, del reporte ciudadano hasta la ubicación del animal. Siete carriles: el Líder de Operaciones y el Transportista aparecen dos veces porque intervienen en dos momentos distintos del proceso (rescate y ubicación).
+
+> **Trazabilidad:** la flecha sólida es un conector que existe en el tablero de Miro. La flecha punteada se dedujo de la lógica del proceso y está pendiente de validar con operaciones. El nodo en rojo marca un hueco real: el tablero no define qué pasa con un animal que no es manipulable.
+
+```mermaid
+flowchart LR
+    subgraph C1["Rescatista"]
+        direction TB
+        E1((" Reporta<br/>animal ")):::inicio
+    end
+    subgraph C2["Líder de Operaciones de Rescate"]
+        direction TB
+        G1{"¿Acepta<br/>el caso?"}
+        F1(((" Archivar<br/>caso "))):::fin
+        T1["Buscar veterinaria"]
+        TM1(("Esperar<br/>6 horas")):::timer
+        G2{"¿Veterinaria<br/>disponible?"}
+        T2["Asignar veterinaria"]
+        T3["Asignar transportista"]
+    end
+    subgraph C3["Transportista"]
+        direction TB
+        T4["Desplazarse al punto"]
+        T5["Buscar animal<br/>reportado"]
+        TM2(("Esperar<br/>24 horas")):::timer
+        G3{"¿Encontraron<br/>al animal?"}
+        G4{"¿Animal<br/>manipulable?"}
+        T6["Capturar animal<br/>reportado"]
+        T7["Transportar a<br/>veterinaria"]
+        HUECO1["Sin definir<br/>en el tablero"]:::hueco
+    end
+    subgraph C4["Veterinaria"]
+        direction TB
+        T8["Recepción del animal"]
+        T9["Diagnóstico inicial"]
+        G5{"¿Requiere<br/>hospitalización?"}
+        TR1[["Tratamiento y<br/>seguimiento"]]
+        G6{"¿Requiere seguir<br/>hospitalización?"}
+        T10["Alta médica"]
+        G8{"¿Requiere<br/>hogar de paso?"}
+        T11["Animal listo para<br/>adopción directa"]
+        F2(((" Entregar animal<br/>a adoptante "))):::fin
+        T16["Notifica al Líder de<br/>Operaciones de Rescate"]
+    end
+    subgraph C5["Líder de Operaciones de Rescate "]
+        direction TB
+        TR2[["Buscar hogar de paso"]]
+        G7{"¿Hogar de paso<br/>disponible?"}
+        TM3(("Esperar<br/>24 horas")):::timer
+        T12["Pagar día extra<br/>en veterinaria"]
+        T13["Asignar transportista"]
+    end
+    subgraph C6["Transportista "]
+        direction TB
+        T14["Desplazarse a<br/>veterinaria"]
+        T15["Transportar a<br/>hogar de paso"]
+    end
+    subgraph C7["Hogar de paso"]
+        direction TB
+        T17["Recepción del animal"]
+        F3(((" Animal ubicado en<br/>hogar de paso activo "))):::fin
+    end
+    E1 --> G1
+    G1 --> F1
+    G1 -.->|SÍ| T1
+    T1 --> G2
+    G2 -->|NO| T1
+    G2 -.->|SÍ| T2
+    T2 -.-> TM1
+    TM1 -.-> T1
+    T2 --> T3
+    T3 --> T4
+    T4 --> T5
+    T4 --> TM2
+    TM2 -.->|sin rastro del animal| F1
+    T5 --> G3
+    G3 -.->|NO| TM2
+    G3 -.->|SÍ| G4
+    G4 -.->|SÍ| T6
+    G4 -.->|NO| HUECO1
+    T6 --> T7
+    T7 --> T8
+    T8 --> T9
+    T9 --> G5
+    G5 -->|SÍ| TR1
+    TR1 --> G6
+    G6 -->|SÍ| TR1
+    G5 -.->|NO| T10
+    G6 -.->|NO| T10
+    T10 --> G8
+    G8 -->|NO| T11
+    T11 --> F2
+    G8 -.->|SÍ| T16
+    T16 --> TR2
+    TR2 --> G7
+    G7 -->|NO| T12
+    T12 --> TR2
+    T12 -.-> TM3
+    TM3 -.-> TR2
+    G7 -.->|SÍ| T13
+    T13 --> T14
+    T14 --> T15
+    T15 --> T17
+    T17 --> F3
+    classDef inicio fill:#ffffff,stroke:#1a1a1a,stroke-width:2px,color:#1a1a1a
+    classDef fin fill:#ffffff,stroke:#1a1a1a,stroke-width:4px,color:#1a1a1a
+    classDef timer fill:#ffffff,stroke:#bd0a0a,stroke-width:2px,color:#1a1a1a
+    classDef hueco fill:#fff0f0,stroke:#bd0a0a,stroke-width:1px,color:#1a1a1a
+```
+
+<!-- Render Miro: ![B1](B1-bpmn-rescate/B1.png) -->
+
+---
+
 *Mantenedor: Vladislav Marinovich · arquitectura, código y metodología © 2026 **Vladislav Marinovich Vargas** (recursos propios) · operado por Marinovich Consulting S.A.S. · FSP recibe licencia de uso; los datos operativos son de la Fundación (Ley 1581).*
